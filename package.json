@@ -1,0 +1,13 @@
+{
+  "name": "ht-item-editor",
+  "version": "1.0.0",
+  "main": "ht-item-editor.js",
+  "repository": "https://github.com/maksimyurkov/ht-item-editor",
+  "author": "maksimyurkov <yurkov.maksim.sergeevich@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@polymer/lit-element": "@next",
+    "@polymer/paper-input": "@next",
+    "ht-wysiwyg": "https://github.com/maksimyurkov/ht-wysiwyg"
+  }
+}
