@@ -8,6 +8,12 @@
   "dependencies": {
     "@polymer/lit-element": "@next",
     "@polymer/paper-input": "@next",
+    "@polymer/iron-icon": "@next",
+    "@polymer/iron-iconset-svg": "@next",
+    "@polymer/paper-button": "@next",
+    "@polymer/paper-icon-button": "@next",
+    "@polymer/paper-listbox": "@next",
+    "@polymer/paper-dropdown-menu": "@next",
     "ht-wysiwyg": "https://github.com/maksimyurkov/ht-wysiwyg"
   }
 }
