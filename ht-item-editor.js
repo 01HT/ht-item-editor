@@ -4,14 +4,25 @@ import "@polymer/paper-input/paper-input.js";
 import "ht-wysiwyg/ht-wysiwyg.js";
 import "ht-item-editor/ht-item-editor-preview.js";
 import "ht-item-editor/ht-item-editor-license.js";
+import "ht-item-editor/ht-item-editor-categories.js";
+import "ht-item-editor/ht-item-editor-attributes.js";
+import "ht-item-editor/ht-item-editor-tags.js";
 class HTItemEditor extends LitElement {
-  render({ licensetypes }) {
+  render() {
     return html`
       <style>
         :host {
           display: block;
           position:relative;
           box-sizing:border-box;
+        }
+
+        section {
+          margin-top:16px;
+        }
+
+        h3 {
+          margin-bottom:0;
         }
 
         #container {
@@ -35,9 +46,20 @@ class HTItemEditor extends LitElement {
         </section>
         <section>
           <h3>Лицензии</h3>
-          <ht-item-editor-license id="license" items=${licensetypes}></ht-item-editor-license>
+          <ht-item-editor-license id="license"></ht-item-editor-license>
         </section>
- 
+        <section>
+          <h3>Категории</h3>
+          <ht-item-editor-categories id="categories"></ht-item-editor-categories>
+        </section>
+        <section>
+          <h3>Атрибуты</h3>
+          <ht-item-editor-attributes id="attributes"></ht-item-editor-attributes>
+        </section>
+        <section>
+          <h3>Теги</h3>
+          <ht-item-editor-tags id="tags"></ht-item-editor-tags>
+        </section>
       </div>
 `;
   }
@@ -59,7 +81,6 @@ class HTItemEditor extends LitElement {
 
   ready() {
     super.ready();
-    this.setLicensetypes();
   }
 
   add() {
@@ -67,23 +88,6 @@ class HTItemEditor extends LitElement {
       .querySelector("ht-item-editor-preview")
       .getImageFile();
     console.log(file);
-  }
-
-  async setLicensetypes() {
-    let items = [];
-    let snapshot = await firebase
-      .firestore()
-      .collection("licensetypes")
-      .get();
-    snapshot.forEach(function(doc) {
-      let data = doc.data();
-      data.licensetypeId = doc.id;
-      items.push(data);
-    });
-    items.sort((a, b) => {
-      return a.index > b.index;
-    });
-    this.licensetypes = items;
   }
 
   save() {}

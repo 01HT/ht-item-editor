@@ -143,6 +143,7 @@ class HTItemEditorLicense extends LitElement {
     this.personalLicenseId = "q23WR8PbikFUBSVWh0fL";
     this.items = [];
     this.selected = [];
+    this.setLicensetypes();
   }
 
   get select() {
@@ -154,6 +155,23 @@ class HTItemEditorLicense extends LitElement {
     this.select.addEventListener("change", e => {
       this.changed();
     });
+  }
+
+  async setLicensetypes() {
+    let items = [];
+    let snapshot = await firebase
+      .firestore()
+      .collection("licensetypes")
+      .get();
+    snapshot.forEach(function(doc) {
+      let data = doc.data();
+      data.licensetypeId = doc.id;
+      items.push(data);
+    });
+    items.sort((a, b) => {
+      return a.index > b.index;
+    });
+    this.items = items;
   }
 
   changed() {
@@ -173,9 +191,11 @@ class HTItemEditorLicense extends LitElement {
           personalLicenseExist = true;
         if (!item.openSource) temp.push(item);
       });
-      if (!personalLicenseExist) {
+      if (
+        !personalLicenseExist &&
+        selectedItem.licensetypeId !== this.personalLicenseId
+      ) {
         this.items.forEach(item => {
-          console.log(item);
           if (item.licensetypeId === this.personalLicenseId) temp.push(item);
         });
       }
@@ -199,14 +219,22 @@ class HTItemEditorLicense extends LitElement {
       }
       selected.push(item);
     });
-    console.log(selected);
     return selected;
   }
 
   _removeItem(e) {
     let selected = [];
     this.selected.forEach(item => {
-      if (item.licensetypeId !== e.target.licensetypeId) selected.push(item);
+      if (
+        item.licensetypeId !== e.target.licensetypeId &&
+        item.licensetypeId !== this.personalLicenseId
+      )
+        selected.push(item);
+      if (
+        this.selected.length > 1 &&
+        item.licensetypeId === this.personalLicenseId
+      )
+        selected.push(item);
     });
     this.selected = selected;
   }
