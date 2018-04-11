@@ -3,9 +3,8 @@ import { LitElement, html } from "@polymer/lit-element";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/iron-icon/iron-icon";
 import "@polymer/paper-button/paper-button";
-import "@polymer/paper-icon-button/paper-icon-button.js";
 
-class HTItemEditorPreview extends LitElement {
+class HTItemEditorGif extends LitElement {
   render({ src }) {
     return html`
       <style>
@@ -39,6 +38,7 @@ class HTItemEditorPreview extends LitElement {
             width: 100%;
             height: 100%;
             max-width: 400px;
+            max-height: 300px;
         }
 
         #img-container {
@@ -52,39 +52,37 @@ class HTItemEditorPreview extends LitElement {
         }
       </style>
       <iron-iconset-svg size="24" name="ht-item-editor-preview-icons">
-        <svg>
-            <defs>
-                <g id="image">
-                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path>
-                </g>
-                  <g id="close">
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-                </g>
-            </defs>
-        </svg>
-      </iron-iconset-svg>
+            <svg>
+                <defs>
+                    <g id="image">
+                        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path>
+                    </g>
+                    <g id="close">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    </g>
+                </defs>
+            </svg>
+        </iron-iconset-svg>
       <div id="container"> 
-          <p>1920x1080 | .jpeg | < 1Mb</p>
+          <p>.gif | < 5mb</p>
                 <paper-button on-click=${e => {
                   this._chooseImage();
                 }}" raised>
-                    <iron-icon icon="ht-item-editor-preview-icons:image"></iron-icon>Выбрать изображение</paper-button>
+                    <iron-icon icon="ht-item-editor-preview-icons:image"></iron-icon>Выбрать Gif</paper-button>
                 <input type="file" on-change=${e => {
                   this._inputChanged();
-                }} accept="image/jpeg" hidden>
+                }} accept="image/gif" hidden>
                 <div id="img-container" hidden?=${
                   src === "" ? true : false
-                }><img src="${src}">
-                <paper-icon-button raised icon="ht-item-editor-preview-icons:close" onclick=${e => {
-                  this.reset();
-                }}></paper-icon-button>
-                </div>
+                }><img src="${src}"><paper-icon-button raised icon="ht-item-editor-preview-icons:close" onclick=${e => {
+      this.reset();
+    }}></paper-icon-button></div>
       </div>
 `;
   }
 
   static get is() {
-    return "ht-item-editor-preview";
+    return "ht-item-editor-gif";
   }
 
   static get properties() {
@@ -122,24 +120,12 @@ class HTItemEditorPreview extends LitElement {
     reader.readAsDataURL(file);
   }
 
-  _getImageFile() {
+  getImageFile() {
     return this.input.files[0];
   }
 
   setImage(URL) {
     this.src = URL;
-  }
-
-  async _uploadFile(file, folderName) {
-    try {
-      let fileName = file.name;
-      let storageRef = firebase.storage().ref();
-      let ref = storageRef.child(`items/${folderName}/${fileName}`);
-      let snapshot = await ref.put(file);
-      return snapshot.downloadURL;
-    } catch (err) {
-      console.log("uploadFile: " + err.message);
-    }
   }
 
   async _changeFileName(file, newFileName) {
@@ -155,40 +141,43 @@ class HTItemEditorPreview extends LitElement {
     }
   }
 
-  async _makeItemThumbnails(itemId) {
-    try {
-      let thumbnails = await firebase
-        .functions()
-        .httpsCallable("storageItemsMakeItemThumbnails")({
-        itemId: itemId
-      });
-      return thumbnails.data;
-    } catch (err) {
-      console.log("_makeItemThumbnails: " + err.message);
-    }
-  }
-
-  async _updateItemDoc(itemId, updates) {
+  async _updateItemDoc(itemId, gifURL) {
     try {
       await firebase
         .firestore()
         .collection("items")
         .doc(itemId)
-        .update(updates);
+        .update({
+          gifURL: gifURL
+        });
     } catch (err) {
       console.log("changeFileName: " + err.message);
     }
   }
 
+  async _uploadFile(file, folderName) {
+    try {
+      let fileName = file.name;
+      let storageRef = firebase.storage().ref();
+      let ref = storageRef.child(`items/${folderName}/${fileName}`);
+      let snapshot = await ref.put(file);
+      return snapshot.downloadURL;
+    } catch (err) {
+      console.log("uploadFile: " + err.message);
+    }
+  }
+
   async save(itemId) {
     try {
-      let file = this._getImageFile();
+      let file = this.getImageFile();
       if (file === undefined) return;
       file = await this._changeFileName(file, itemId);
-      let imageURL = await this._uploadFile(file, itemId);
-      let thumbnailsURLs = await this._makeItemThumbnails(itemId);
-      thumbnailsURLs.imageURL = imageURL;
-      await this._updateItemDoc(itemId, thumbnailsURLs);
+      let userId = firebase.auth().currentUser.uid;
+      let storageRef = firebase.storage().ref();
+      let ref = storageRef.child(`items/${itemId}`);
+      let snapshot = await ref.put(file);
+      let gifURL = await this._uploadFile(file, itemId);
+      await this._updateItemDoc(itemId, gifURL);
     } catch (err) {
       console.log("save: " + err.message);
     }
@@ -200,4 +189,4 @@ class HTItemEditorPreview extends LitElement {
   }
 }
 
-customElements.define(HTItemEditorPreview.is, HTItemEditorPreview);
+customElements.define(HTItemEditorGif.is, HTItemEditorGif);

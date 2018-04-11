@@ -14,6 +14,7 @@ class HTItemEditorCategories extends LitElement {
         }
 
         #container {
+          margin-top: -16px;
           display: flex;
           flex-direction: column;
         }
@@ -35,13 +36,13 @@ class HTItemEditorCategories extends LitElement {
 
   static get properties() {
     return {
-      categories: Array
+      selected: Array
     };
   }
 
   constructor() {
     super();
-    this.categories = [];
+    this.selected = [];
     this.categoriesElements = [];
     this._getCategories();
     this.addEventListener("category-selected", e => {
@@ -49,12 +50,26 @@ class HTItemEditorCategories extends LitElement {
     });
   }
 
-  getSelected() {
+  get selected() {
     let selected = [];
     this.categoriesElements.forEach(elem => {
       if (elem.selected) selected.push(elem.data);
     });
     return selected;
+  }
+
+  set selected(categories) {
+    (async () => {
+      if (
+        this.categoriesElements === undefined ||
+        this.categoriesElements.length === 0
+      )
+        return;
+      this.unselectCategory();
+      for (let category of categories) {
+        await this.selectCategory(category.categoryId);
+      }
+    })();
   }
 
   async categoryChange(e) {
@@ -63,19 +78,19 @@ class HTItemEditorCategories extends LitElement {
     if (!selected) this.unselectCategory();
     if (selected) {
       await this.unselectCategory();
-      this.selectCategory(categoryId);
+      await this.selectCategory(categoryId);
     }
   }
 
   async selectCategory(categoryId) {
-    this.categoriesElements.forEach(elem => {
+    for (let elem of this.categoriesElements) {
       let elemCategoryId = elem.data.categoryId;
       let elemParentId = elem.data.parentId;
       if (categoryId === elemCategoryId && elemParentId !== "") {
         elem.selected = true;
-        if (elemCategoryId !== "root") this.selectCategory(elemParentId);
+        if (elemCategoryId !== "root") await this.selectCategory(elemParentId);
       }
-    });
+    }
   }
 
   async unselectCategory() {
@@ -95,15 +110,15 @@ class HTItemEditorCategories extends LitElement {
       data.categoryId = doc.id;
       categories.push(data);
     });
-    this.categories = categories;
     this.shadowRoot.querySelector("#tree").appendChild(
-      this._buildBranch({
+      await this._buildBranch({
         title: "Категории",
         categoryId: "root",
         parentId: "",
-        categories: Object.assign([], this.categories)
+        categories: Object.assign([], categories)
       })
     );
+    this.selected = Object.assign([], this.selected);
   }
 
   _getChildCategories(categoryId, categories) {
@@ -114,28 +129,27 @@ class HTItemEditorCategories extends LitElement {
     return childCategories;
   }
 
-  _buildBranch(options) {
+  async _buildBranch(options) {
     let item = document.createElement(
       "ht-item-editor-categories-category-item"
     );
+    this.categoriesElements.push(item);
     item.data = {
       title: options.title,
       categoryId: options.categoryId,
       parentId: options.parentId
     };
-    options.categories.forEach(category => {
+    for (let category of options.categories) {
       if (category.parentId === options.categoryId) {
-        item.appendChild(
-          this._buildBranch({
-            title: category.name,
-            categoryId: category.categoryId,
-            parentId: category.parentId,
-            categories: options.categories
-          })
-        );
+        let branch = await this._buildBranch({
+          title: category.name,
+          categoryId: category.categoryId,
+          parentId: category.parentId,
+          categories: options.categories
+        });
+        item.appendChild(branch);
       }
-    });
-    this.categoriesElements.push(item);
+    }
     return item;
   }
 }

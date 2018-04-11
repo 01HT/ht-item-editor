@@ -1,7 +1,7 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
 import "@polymer/paper-checkbox/paper-checkbox.js";
-import "./ht-item-editor-categories-category-item.js";
+import "./ht-item-editor-attributes-attribute-item.js";
 
 class HTItemEditorAttributes extends LitElement {
   render() {
@@ -14,6 +14,7 @@ class HTItemEditorAttributes extends LitElement {
         }
 
         #container {
+          margin-top: -16px;
           display: flex;
           flex-direction: column;
         }
@@ -35,13 +36,13 @@ class HTItemEditorAttributes extends LitElement {
 
   static get properties() {
     return {
-      categories: Array
+      selected: Array
     };
   }
 
   constructor() {
     super();
-    this.categories = [];
+    this.selected = [];
     this.categoriesElements = [];
     this._getCategories();
     this.addEventListener("category-selected", e => {
@@ -49,12 +50,26 @@ class HTItemEditorAttributes extends LitElement {
     });
   }
 
-  getSelected() {
+  get selected() {
     let selected = [];
     this.categoriesElements.forEach(elem => {
       if (elem.selected) selected.push(elem.data);
     });
     return selected;
+  }
+
+  set selected(categories) {
+    (async () => {
+      if (
+        this.categoriesElements === undefined ||
+        this.categoriesElements.length === 0
+      )
+        return;
+      this.unselectCategory();
+      for (let category of categories) {
+        await this.selectCategory(category.categoryId);
+      }
+    })();
   }
 
   async categoryChange(e) {
@@ -64,15 +79,21 @@ class HTItemEditorAttributes extends LitElement {
   }
 
   async selectCategory(categoryId) {
-    this.categoriesElements.forEach(elem => {
+    for (let elem of this.categoriesElements) {
       let elemCategoryId = elem.data.categoryId;
       let elemParentId = elem.data.parentId;
       if (categoryId === elemCategoryId && elemParentId !== "root") {
         if (elemCategoryId !== "root" && elemParentId !== "") {
           elem.selected = true;
-          this.selectCategory(elemParentId);
+          await this.selectCategory(elemParentId);
         }
       }
+    }
+  }
+
+  async unselectCategory() {
+    this.categoriesElements.forEach(elem => {
+      elem.selected = false;
     });
   }
 
@@ -87,15 +108,15 @@ class HTItemEditorAttributes extends LitElement {
       data.categoryId = doc.id;
       categories.push(data);
     });
-    this.categories = categories;
     this.shadowRoot.querySelector("#tree").appendChild(
-      this._buildBranch({
+      await this._buildBranch({
         title: "Атрибуты",
         categoryId: "root",
         parentId: "",
-        categories: Object.assign([], this.categories)
+        categories: Object.assign([], categories)
       })
     );
+    this.selected = Object.assign([], this.selected);
   }
 
   _getChildCategories(categoryId, categories) {
@@ -106,28 +127,27 @@ class HTItemEditorAttributes extends LitElement {
     return childCategories;
   }
 
-  _buildBranch(options) {
+  async _buildBranch(options) {
     let item = document.createElement(
-      "ht-item-editor-categories-category-item"
+      "ht-item-editor-attributes-attribute-item"
     );
+    this.categoriesElements.push(item);
     item.data = {
       title: options.title,
       categoryId: options.categoryId,
       parentId: options.parentId
     };
-    options.categories.forEach(category => {
+    for (let category of options.categories) {
       if (category.parentId === options.categoryId) {
-        item.appendChild(
-          this._buildBranch({
-            title: category.name,
-            categoryId: category.categoryId,
-            parentId: category.parentId,
-            categories: options.categories
-          })
-        );
+        let branch = await this._buildBranch({
+          title: category.name,
+          categoryId: category.categoryId,
+          parentId: category.parentId,
+          categories: options.categories
+        });
+        item.appendChild(branch);
       }
-    });
-    this.categoriesElements.push(item);
+    }
     return item;
   }
 }

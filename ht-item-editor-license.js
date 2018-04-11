@@ -3,11 +3,9 @@ import { LitElement, html } from "@polymer/lit-element";
 import { repeat } from "lit-html/lib/repeat.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/paper-icon-button/paper-icon-button.js";
-// import "@polymer/paper-listbox";
-// import "@polymer/paper-dropdown-menu";
 
 class HTItemEditorLicense extends LitElement {
-  render({ items, selected }) {
+  render({ licensetypes, selected }) {
     return html`
       <style>
         :host {
@@ -88,32 +86,35 @@ class HTItemEditorLicense extends LitElement {
   
         <div id="container">
           <select>
-            <option value="">Выберите лицензию</option>
+             <option value="">Выберите лицензию</option>
             ${repeat(
-              items,
+              licensetypes,
               item => html`
                 <option data=${item}>${item.name}</option>
           `
             )}
+           
           </select>
           <div id="selected">
             ${repeat(
               selected,
-              item => html`
+              licensetype => html`
                 <div class="license-container" licensetypeId=${
-                  item.licensetypeId
+                  licensetype.licensetypeId
                 }>
-                  <div class="name">${item.name}</div>
+                  <div class="name">${licensetype.name}</div>
                   <div class="right">
-                      <div class="price" hidden?=${item.free}>
+                      <div class="price" hidden?=${licensetype.free}>
                           <span>$ </span>
-                          <input placeholder="Цена" id="${
-                            item.licensetypeId
-                          }" value$=${item.price}/>
+                          <input placeholder="Цена" id="id${
+                            licensetype.licensetypeId
+                          }" value$=${licensetype.price}>
                       </div>
                       <paper-icon-button icon="ht-item-editor-license-icons:close" openSource=${
-                        item.openSource
-                      } licensetypeId=${item.licensetypeId} on-click=${e => {
+                        licensetype.openSource
+                      } licensetypeId=${
+                licensetype.licensetypeId
+              } on-click=${e => {
                 this._removeItem(e);
               }}></paper-icon-button>
                   </div>
@@ -133,32 +134,51 @@ class HTItemEditorLicense extends LitElement {
 
   static get properties() {
     return {
-      items: Array,
-      selected: Array
+      selected: Array,
+      licensetypes: Array
     };
   }
 
   constructor() {
     super();
     this.personalLicenseId = "q23WR8PbikFUBSVWh0fL";
-    this.items = [];
+    this.licensetypes = [];
     this.selected = [];
+  }
+
+  ready() {
+    super.ready();
     this.setLicensetypes();
+    this.select.addEventListener("change", e => {
+      this.changed();
+    });
+  }
+
+  static get selected() {
+    let selected = [];
+    this.selected.forEach(item => {
+      if (!item.free) {
+        item.price = this.shadowRoot.querySelector(
+          `#id${item.licensetypeId}`
+        ).value;
+        if (item.price === undefined || item.price === "") item.price = 1;
+      }
+      selected.push(item);
+    });
+    return selected;
+  }
+
+  static set selected(selected) {
+    if (this.licensetypes.length === 0) return;
+    this.selected = selected;
   }
 
   get select() {
     return this.shadowRoot.querySelector("select");
   }
 
-  ready() {
-    super.ready();
-    this.select.addEventListener("change", e => {
-      this.changed();
-    });
-  }
-
   async setLicensetypes() {
-    let items = [];
+    let licensetypes = [];
     let snapshot = await firebase
       .firestore()
       .collection("licensetypes")
@@ -166,12 +186,14 @@ class HTItemEditorLicense extends LitElement {
     snapshot.forEach(function(doc) {
       let data = doc.data();
       data.licensetypeId = doc.id;
-      items.push(data);
+      licensetypes.push(data);
     });
-    items.sort((a, b) => {
+    licensetypes.sort((a, b) => {
       return a.index > b.index;
     });
-    this.items = items;
+    this.licensetypes = licensetypes;
+    let selected = Object.assign([], this.selected);
+    this.selected = selected;
   }
 
   changed() {
@@ -195,7 +217,7 @@ class HTItemEditorLicense extends LitElement {
         !personalLicenseExist &&
         selectedItem.licensetypeId !== this.personalLicenseId
       ) {
-        this.items.forEach(item => {
+        this.licensetypes.forEach(item => {
           if (item.licensetypeId === this.personalLicenseId) temp.push(item);
         });
       }
@@ -206,20 +228,6 @@ class HTItemEditorLicense extends LitElement {
     });
     this.select.options.selectedIndex = 0;
     this.selected = selected;
-  }
-
-  getSelected() {
-    let selected = [];
-    this.selected.forEach(item => {
-      if (!item.free) {
-        item.price = this.shadowRoot.querySelector(
-          `#${item.licensetypeId}`
-        ).value;
-        if (item.price === undefined || item.price === "") item.price = 1;
-      }
-      selected.push(item);
-    });
-    return selected;
   }
 
   _removeItem(e) {

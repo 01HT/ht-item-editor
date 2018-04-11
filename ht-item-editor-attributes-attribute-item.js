@@ -4,7 +4,7 @@ import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
-class HTItemEditorCategoriesCategoryItem extends LitElement {
+class HTItemEditorAttributesAttributeItem extends LitElement {
   render({ data, opened, selected }) {
     return html`
       <style>
@@ -130,7 +130,7 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
   }
 
   static get is() {
-    return "ht-item-editor-categories-category-item";
+    return "ht-item-editor-attributes-attribute-item";
   }
 
   static get properties() {
@@ -145,7 +145,7 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
   }
 
   isRoot() {
-    if (this.data.parentId === "") return true;
+    if (this.data.parentId === "" || this.data.parentId === "root") return true;
     return false;
   }
 
@@ -181,6 +181,6 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
 }
 
 customElements.define(
-  HTItemEditorCategoriesCategoryItem.is,
-  HTItemEditorCategoriesCategoryItem
+  HTItemEditorAttributesAttributeItem.is,
+  HTItemEditorAttributesAttributeItem
 );

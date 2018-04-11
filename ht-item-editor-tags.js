@@ -30,8 +30,9 @@ class HTItemEditorTags extends LitElement {
         }
 
         #container {
-            display:flex;
-            flex-direction: column;
+          margin-top:-16px;
+          display:flex;
+          flex-direction: column;
         }
 
         #selected {
@@ -45,7 +46,7 @@ class HTItemEditorTags extends LitElement {
             display: flex;
             justify-content: space-between;
             flex-direction: row;
-            margin: 2px 8px 2px 0;
+            margin: 4px 8px 4px 0;
             padding: 2px 2px 2px 16px;
             align-items: center;
             border-radius: 2px;
@@ -137,7 +138,6 @@ class HTItemEditorTags extends LitElement {
     if (!isExist) selected.push(selectedItem.data);
     this.selected = selected;
     this.select.options.selectedIndex = 0;
-    console.log(this.selected);
   }
 
   getSelected() {
