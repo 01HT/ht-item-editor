@@ -5,7 +5,7 @@ import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 
 class HTItemEditorLicense extends LitElement {
-  render({ licensetypes, selected }) {
+  render({ licensetypes, selectedLicensetypes }) {
     return html`
       <style>
         :host {
@@ -97,7 +97,7 @@ class HTItemEditorLicense extends LitElement {
           </select>
           <div id="selected">
             ${repeat(
-              selected,
+              selectedLicensetypes,
               licensetype => html`
                 <div class="license-container" licensetypeId=${
                   licensetype.licensetypeId
@@ -134,8 +134,8 @@ class HTItemEditorLicense extends LitElement {
 
   static get properties() {
     return {
-      selected: Array,
-      licensetypes: Array
+      licensetypes: Array,
+      selectedLicensetypes: Array
     };
   }
 
@@ -143,7 +143,7 @@ class HTItemEditorLicense extends LitElement {
     super();
     this.personalLicenseId = "q23WR8PbikFUBSVWh0fL";
     this.licensetypes = [];
-    this.selected = [];
+    this.selectedLicensetypes = [];
   }
 
   ready() {
@@ -154,9 +154,9 @@ class HTItemEditorLicense extends LitElement {
     });
   }
 
-  static get selected() {
+  get selected() {
     let selected = [];
-    this.selected.forEach(item => {
+    for (let item of this.selectedLicensetypes) {
       if (!item.free) {
         item.price = this.shadowRoot.querySelector(
           `#id${item.licensetypeId}`
@@ -164,13 +164,14 @@ class HTItemEditorLicense extends LitElement {
         if (item.price === undefined || item.price === "") item.price = 1;
       }
       selected.push(item);
-    });
+    }
     return selected;
   }
 
-  static set selected(selected) {
-    if (this.licensetypes.length === 0) return;
-    this.selected = selected;
+  set selected(selected) {
+    if (this.licensetypes === undefined || this.licensetypes.length === 0)
+      return;
+    this.selectedLicensetypes = selected;
   }
 
   get select() {
@@ -192,15 +193,15 @@ class HTItemEditorLicense extends LitElement {
       return a.index > b.index;
     });
     this.licensetypes = licensetypes;
-    let selected = Object.assign([], this.selected);
-    this.selected = selected;
+    let selected = Object.assign([], this.selectedLicensetypes);
+    this.selectedLicensetypes = selected;
   }
 
   changed() {
     let selectedIndex = this.select.options.selectedIndex;
     let selectedItem = this.select.options[selectedIndex].data;
     if (selectedItem === undefined) return;
-    let selected = Object.assign([], this.selected);
+    let selected = Object.assign([], this.selectedLicensetypes);
     if (selectedItem.openSource) {
       selected = [selectedItem];
     }
@@ -227,24 +228,24 @@ class HTItemEditorLicense extends LitElement {
       return a.index > b.index;
     });
     this.select.options.selectedIndex = 0;
-    this.selected = selected;
+    this.selectedLicensetypes = selected;
   }
 
   _removeItem(e) {
     let selected = [];
-    this.selected.forEach(item => {
+    this.selectedLicensetypes.forEach(item => {
       if (
         item.licensetypeId !== e.target.licensetypeId &&
         item.licensetypeId !== this.personalLicenseId
       )
         selected.push(item);
       if (
-        this.selected.length > 1 &&
+        this.selectedLicensetypes.length > 1 &&
         item.licensetypeId === this.personalLicenseId
       )
         selected.push(item);
     });
-    this.selected = selected;
+    this.selectedLicensetypes = selected;
   }
 }
 
