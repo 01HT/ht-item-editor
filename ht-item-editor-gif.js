@@ -172,10 +172,6 @@ class HTItemEditorGif extends LitElement {
       let file = this.getImageFile();
       if (file === undefined) return;
       file = await this._changeFileName(file, itemId);
-      let userId = firebase.auth().currentUser.uid;
-      let storageRef = firebase.storage().ref();
-      let ref = storageRef.child(`items/${itemId}`);
-      let snapshot = await ref.put(file);
       let gifURL = await this._uploadFile(file, itemId);
       await this._updateItemDoc(itemId, gifURL);
     } catch (err) {
