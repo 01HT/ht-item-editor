@@ -96,11 +96,9 @@ class HTItemEditor extends LitElement {
       <div id="container" hidden?=${loading}>
         <h1>${itemId === "" ? "Добавить продукт" : "Настроки продукта"}</h1>
         <ht-item-editor-status id="status" hidden?=${
-          !itemId === "" ? false : true
+          itemId === "" ? true : false
         }></ht-item-editor-status>
-        <paper-toggle-button id="published" hidden?=${
-          !itemId === "" ? false : true
-        }>Отображать в каталоге</paper-toggle-button>
+        <paper-toggle-button id="published">Отображать в каталоге</paper-toggle-button>
         <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="50"></paper-input>
         <paper-input id="name-in-url" label="Название в URL" placeholder="my-super-item-7" allowed-pattern="^[0-9a-z\-]+$" char-counter maxlength="100"></paper-input>
         <paper-input id="github" label="Ссылка на репозиторий" placeholder="author/repository">
@@ -171,7 +169,6 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector("#status").statusText =
         "Добавление продукта";
       this.shadowRoot.querySelector("#published").checked = true;
-      this.shadowRoot.querySelector("#published").disabled = true;
       this.shadowRoot.querySelector("#name").value = "";
       this.shadowRoot.querySelector("#name-in-url").value = "";
       this.shadowRoot.querySelector("#github").value = "";
@@ -208,8 +205,6 @@ class HTItemEditor extends LitElement {
       let itemData = await this._getItemData(itemId);
       this.shadowRoot.querySelector("#status").statusText = itemData.statusText;
       this.shadowRoot.querySelector("#published").checked = itemData.published;
-      if (itemData.status === "moderation")
-        this.shadowRoot.querySelector("#published").disabled = true;
       this.shadowRoot.querySelector("#name").value = itemData.name;
       this.shadowRoot.querySelector("#name-in-url").value = itemData.nameInURL;
       this.shadowRoot.querySelector("#github").value = itemData.repositoryURL;
@@ -259,8 +254,8 @@ class HTItemEditor extends LitElement {
     try {
       // Data that use only when create doc
       let item = {};
-      status: "moderation";
-      statusText: "Рассматривается модератором";
+      item.status = "moderation";
+      item.statusText = "Рассматривается модератором";
       item.published = false;
       item.created = firebase.firestore.FieldValue.serverTimestamp();
       item.nameInURL =
