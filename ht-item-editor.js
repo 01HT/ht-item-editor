@@ -323,7 +323,6 @@ class HTItemEditor extends LitElement {
       let itemId = this.itemId;
       let updates = await this._updatedData();
       await this._updateDoc(itemId, updates);
-      this.loadingText = "";
       await this.shadowRoot.querySelector("#preview").save(itemId);
       await this.shadowRoot.querySelector("#gif").save(itemId);
       this.dispatchEvent(
