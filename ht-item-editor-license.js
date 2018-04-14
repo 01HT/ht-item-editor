@@ -134,8 +134,8 @@ class HTItemEditorLicense extends LitElement {
 
   static get properties() {
     return {
-      licensetypes: Array,
-      selectedLicensetypes: Array
+      selectedLicensetypes: Array,
+      licensetypes: Array
     };
   }
 
@@ -156,7 +156,7 @@ class HTItemEditorLicense extends LitElement {
 
   get selected() {
     let selected = [];
-    for (let item of this.selectedLicensetypes) {
+    this.selectedLicensetypes.forEach(item => {
       if (!item.free) {
         item.price = this.shadowRoot.querySelector(
           `#id${item.licensetypeId}`
@@ -164,13 +164,12 @@ class HTItemEditorLicense extends LitElement {
         if (item.price === undefined || item.price === "") item.price = 1;
       }
       selected.push(item);
-    }
+    });
     return selected;
   }
 
   set selected(selected) {
-    if (this.licensetypes === undefined || this.licensetypes.length === 0)
-      return;
+    if (this.licensetypes.length === 0) return;
     this.selectedLicensetypes = selected;
   }
 
