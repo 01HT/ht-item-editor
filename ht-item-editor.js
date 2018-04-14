@@ -96,9 +96,11 @@ class HTItemEditor extends LitElement {
       <div id="container" hidden?=${loading}>
         <h1>${itemId === "" ? "Добавить продукт" : "Настроки продукта"}</h1>
         <ht-item-editor-status id="status" hidden?=${
-          itemId === "" ? true : false
+          !itemId === "" ? false : true
         }></ht-item-editor-status>
-        <paper-toggle-button id="published">Отображать в каталоге</paper-toggle-button>
+        <paper-toggle-button id="published" hidden?=${
+          !itemId === "" ? false : true
+        }>Отображать в каталоге</paper-toggle-button>
         <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="50"></paper-input>
         <paper-input id="name-in-url" label="Название в URL" placeholder="my-super-item-7" allowed-pattern="^[0-9a-z\-]+$" char-counter maxlength="100"></paper-input>
         <paper-input id="github" label="Ссылка на репозиторий" placeholder="author/repository">
@@ -169,6 +171,7 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector("#status").statusText =
         "Добавление продукта";
       this.shadowRoot.querySelector("#published").checked = true;
+      this.shadowRoot.querySelector("#published").disabled = true;
       this.shadowRoot.querySelector("#name").value = "";
       this.shadowRoot.querySelector("#name-in-url").value = "";
       this.shadowRoot.querySelector("#github").value = "";
@@ -205,6 +208,8 @@ class HTItemEditor extends LitElement {
       let itemData = await this._getItemData(itemId);
       this.shadowRoot.querySelector("#status").statusText = itemData.statusText;
       this.shadowRoot.querySelector("#published").checked = itemData.published;
+      if (itemData.status === "moderation")
+        this.shadowRoot.querySelector("#published").disabled = true;
       this.shadowRoot.querySelector("#name").value = itemData.name;
       this.shadowRoot.querySelector("#name-in-url").value = itemData.nameInURL;
       this.shadowRoot.querySelector("#github").value = itemData.repositoryURL;
@@ -250,17 +255,38 @@ class HTItemEditor extends LitElement {
     }
   }
 
+  async _getUsersData(userId) {
+    try {
+      let snapshot = await firebase
+        .firestore()
+        .collection("items")
+        .doc(userId)
+        .get();
+      let data = snapshot.data();
+      let usersData = {
+        displayName: data.displayName,
+        nickname: data.nickname,
+        verified: data.verified,
+        photoURL: data.photoURL
+      };
+      return usersData;
+    } catch (err) {
+      console.log("_getUsersData: " + err.message);
+    }
+  }
+
   async _addDoc() {
     try {
       // Data that use only when create doc
       let item = {};
-      item.status = "moderation";
-      item.statusText = "Рассматривается модератором";
+      status: "moderation";
+      statusText: "Рассматривается модератором";
       item.published = false;
       item.created = firebase.firestore.FieldValue.serverTimestamp();
       item.nameInURL =
         this.shadowRoot.querySelector("#name-in-url").value || "";
       item.authorId = firebase.auth().currentUser.uid;
+      item.usersData = await this._getUsersData(userId);
       item.sales = 0;
       item.imageURL =
         "https://firebasestorage.googleapis.com/v0/b/api-01-ht.appspot.com/o/default%2Fitem%2Fitem-default-image.png?alt=media&token=00dd251b-7bcb-4bd2-9c19-a43e4f478f49";
@@ -323,6 +349,7 @@ class HTItemEditor extends LitElement {
       let itemId = this.itemId;
       let updates = await this._updatedData();
       await this._updateDoc(itemId, updates);
+      this.loadingText = "";
       await this.shadowRoot.querySelector("#preview").save(itemId);
       await this.shadowRoot.querySelector("#gif").save(itemId);
       this.dispatchEvent(
