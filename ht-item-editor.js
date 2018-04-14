@@ -259,7 +259,7 @@ class HTItemEditor extends LitElement {
     try {
       let snapshot = await firebase
         .firestore()
-        .collection("items")
+        .collection("users")
         .doc(userId)
         .get();
       let data = snapshot.data();
@@ -286,7 +286,7 @@ class HTItemEditor extends LitElement {
       item.nameInURL =
         this.shadowRoot.querySelector("#name-in-url").value || "";
       item.authorId = firebase.auth().currentUser.uid;
-      item.usersData = await this._getUsersData(userId);
+      item.usersData = await this._getUsersData(item.authorId);
       item.sales = 0;
       item.imageURL =
         "https://firebasestorage.googleapis.com/v0/b/api-01-ht.appspot.com/o/default%2Fitem%2Fitem-default-image.png?alt=media&token=00dd251b-7bcb-4bd2-9c19-a43e4f478f49";
