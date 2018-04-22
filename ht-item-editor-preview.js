@@ -4,6 +4,7 @@ import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/iron-icon/iron-icon";
 import "@polymer/paper-button/paper-button";
 import "@polymer/paper-icon-button/paper-icon-button.js";
+import { callFirebaseHTTPFunction } from "ht-client-helper-functions";
 
 class HTItemEditorPreview extends LitElement {
   render({ src }) {
@@ -69,7 +70,7 @@ class HTItemEditorPreview extends LitElement {
                   this._chooseImage();
                 }}" raised>
                     <iron-icon icon="ht-item-editor-preview-icons:image"></iron-icon>Выбрать изображение</paper-button>
-                <input type="file" on-change=${e => {
+                <input type="file" accept="image/jpeg" on-change=${e => {
                   this._inputChanged();
                 }} accept="image/jpeg" hidden>
                 <div id="img-container" hidden?=${
@@ -130,53 +131,19 @@ class HTItemEditorPreview extends LitElement {
     this.src = URL;
   }
 
-  async _uploadFile(file, folderName) {
+  async _uploadImage(file, itemId) {
     try {
-      let fileName = file.name;
-      let storageRef = firebase.storage().ref();
-      let ref = storageRef.child(`items/${folderName}/${fileName}`);
-      let snapshot = await ref.put(file);
-      return snapshot.downloadURL;
+      let formData = new FormData();
+      formData.append("itemId", itemId);
+      formData.append("myfile", file);
+      let functionOptions = {
+        name: "httpsItemsAddImage",
+        options: { method: "POST", body: formData },
+        authorization: true
+      };
+      await callFirebaseHTTPFunction(functionOptions);
     } catch (err) {
       console.log("uploadFile: " + err.message);
-    }
-  }
-
-  async _changeFileName(file, newFileName) {
-    try {
-      let fileNameParts = file.name.split(".");
-      let fileFormat = fileNameParts[fileNameParts.length - 1];
-      let fileName = newFileName + "." + fileFormat;
-      let blob = file.slice(0, file.size, file.type);
-      let newFile = new File([blob], fileName, { type: file.type });
-      return newFile;
-    } catch (err) {
-      console.log("changeFileName: " + err.message);
-    }
-  }
-
-  async _makeItemThumbnails(itemId) {
-    try {
-      let thumbnails = await firebase
-        .functions()
-        .httpsCallable("storageItemsMakeItemThumbnails")({
-        itemId: itemId
-      });
-      return thumbnails.data;
-    } catch (err) {
-      console.log("_makeItemThumbnails: " + err.message);
-    }
-  }
-
-  async _updateItemDoc(itemId, updates) {
-    try {
-      await firebase
-        .firestore()
-        .collection("items")
-        .doc(itemId)
-        .update(updates);
-    } catch (err) {
-      console.log("changeFileName: " + err.message);
     }
   }
 
@@ -184,13 +151,9 @@ class HTItemEditorPreview extends LitElement {
     try {
       let file = this._getImageFile();
       if (file === undefined) return;
-      file = await this._changeFileName(file, itemId);
-      let imageURL = await this._uploadFile(file, itemId);
-      let thumbnailsURLs = await this._makeItemThumbnails(itemId);
-      thumbnailsURLs.imageURL = imageURL;
-      await this._updateItemDoc(itemId, thumbnailsURLs);
-    } catch (err) {
-      console.log("save: " + err.message);
+      await this._uploadImage(file, itemId);
+    } catch (error) {
+      console.log("save: " + error.message);
     }
   }
 
