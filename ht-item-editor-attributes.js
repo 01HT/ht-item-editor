@@ -110,7 +110,7 @@ class HTItemEditorAttributes extends LitElement {
     });
     this.shadowRoot.querySelector("#tree").appendChild(
       await this._buildBranch({
-        title: "Атрибуты",
+        name: "Атрибуты",
         categoryId: "root",
         parentId: "",
         categories: Object.assign([], categories)
@@ -133,14 +133,14 @@ class HTItemEditorAttributes extends LitElement {
     );
     this.categoriesElements.push(item);
     item.data = {
-      title: options.title,
+      name: options.name,
       categoryId: options.categoryId,
       parentId: options.parentId
     };
     for (let category of options.categories) {
       if (category.parentId === options.categoryId) {
         let branch = await this._buildBranch({
-          title: category.name,
+          name: category.name,
           categoryId: category.categoryId,
           parentId: category.parentId,
           categories: options.categories
