@@ -119,7 +119,7 @@ class HTItemEditorAttributesAttributeItem extends LitElement {
           }" selected?=${selected} on-click=${e => {
       this.toggle(e);
     }}>${
-      data.title
+      data.name
     } <iron-icon icon="ht-item-editor-categories-item:check-circle"></iron-icon></div>
         </div>
           <div hidden?=${!opened}>
