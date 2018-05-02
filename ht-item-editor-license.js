@@ -161,7 +161,8 @@ class HTItemEditorLicense extends LitElement {
         item.price = this.shadowRoot.querySelector(
           `#id${item.licensetypeId}`
         ).value;
-        if (item.price === undefined || item.price === "") item.price = 1;
+        item.price = +item.price;
+        if (item.price === undefined || item.price === "") item.price = 0;
       }
       selected.push(item);
     });
@@ -245,6 +246,15 @@ class HTItemEditorLicense extends LitElement {
         selected.push(item);
     });
     this.selectedLicensetypes = selected;
+  }
+
+  getPrice() {
+    let price = 0;
+    this.selectedLicensetypes.forEach(item => {
+      if (item.name === "Yunato Single") price = +item.price;
+      if (item.name === "Yunato Extended" && price === 0) price = +item.price;
+    });
+    return price;
   }
 }
 
