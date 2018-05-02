@@ -246,6 +246,7 @@ class HTItemEditor extends LitElement {
         .querySelector("#description")
         .getData();
       item.license = this.shadowRoot.querySelector("#license").selected;
+      item.price = this.shadowRoot.querySelector("#license").getPrice();
       item.categories = this.shadowRoot.querySelector("#categories").selected;
       item.attributes = this.shadowRoot.querySelector("#attributes").selected;
       item.tags = this.shadowRoot.querySelector("#tags").selected;
