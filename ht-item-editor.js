@@ -12,7 +12,7 @@ import "ht-item-editor/ht-item-editor-categories.js";
 import "ht-item-editor/ht-item-editor-attributes.js";
 import "ht-item-editor/ht-item-editor-tags.js";
 class HTItemEditor extends LitElement {
-  render({ itemId, loading, loadingText }) {
+  _render({ itemId, loading, loadingText }) {
     return html`
       <style>
         :host {

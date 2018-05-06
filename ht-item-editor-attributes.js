@@ -4,7 +4,7 @@ import "@polymer/paper-checkbox/paper-checkbox.js";
 import "./ht-item-editor-attributes-attribute-item.js";
 
 class HTItemEditorAttributes extends LitElement {
-  render() {
+  _render() {
     return html`
       <style>
         :host {

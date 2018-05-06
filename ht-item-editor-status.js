@@ -2,7 +2,7 @@
 import { LitElement, html } from "@polymer/lit-element";
 
 class HTItemEditorStatus extends LitElement {
-  render({ statusText }) {
+  _render({ statusText }) {
     return html`
       <style>
         :host {

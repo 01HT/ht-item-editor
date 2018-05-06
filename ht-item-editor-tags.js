@@ -5,7 +5,7 @@ import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 
 class HTItemEditorTags extends LitElement {
-  render({ tags, selected }) {
+  _render({ tags, selected }) {
     return html`
       <style>
         :host {

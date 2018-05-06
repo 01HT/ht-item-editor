@@ -5,7 +5,7 @@ import "@polymer/iron-icon/iron-icon";
 import "@polymer/paper-button/paper-button";
 
 class HTItemEditorGif extends LitElement {
-  render({ src }) {
+  _render({ src }) {
     return html`
       <style>
         :host {

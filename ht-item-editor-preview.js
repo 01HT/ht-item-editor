@@ -7,7 +7,7 @@ import "@polymer/paper-icon-button/paper-icon-button.js";
 import { callFirebaseHTTPFunction } from "ht-client-helper-functions";
 
 class HTItemEditorPreview extends LitElement {
-  render({ src }) {
+  _render({ src }) {
     return html`
       <style>
         :host {

@@ -5,7 +5,7 @@ import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
 class HTItemEditorAttributesAttributeItem extends LitElement {
-  render({ data, opened, selected }) {
+  _render({ data, opened, selected }) {
     return html`
       <style>
         :host {
