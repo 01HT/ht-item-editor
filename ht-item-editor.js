@@ -289,16 +289,16 @@ class HTItemEditor extends LitElement {
       item.authorId = firebase.auth().currentUser.uid;
       item.usersData = await this._getUsersData(item.authorId);
       item.sales = 0;
-      item.imageURL =
-        "https://firebasestorage.googleapis.com/v0/b/api-01-ht.appspot.com/o/default%2Fitem%2Fitem-default-image.png?alt=media&token=00dd251b-7bcb-4bd2-9c19-a43e4f478f49";
+      https: item.imageURL =
+        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image.jpg";
       item.thumb_w960 =
-        "https://firebasestorage.googleapis.com/v0/b/api-01-ht.appspot.com/o/default%2Fitem%2Fitem-default-image-thumb-960x540.png?alt=media&token=09196d16-235d-49ea-bf58-f9cdfefb1efc";
+        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-960w.jpg";
       item.thumb_w480 =
-        "https://firebasestorage.googleapis.com/v0/b/api-01-ht.appspot.com/o/default%2Fitem%2Fitem-default-image-thumb-480x270.png?alt=media&token=7120d3cf-b8cf-453e-ac59-f9d7b54cbe70";
+        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-480w.jpg";
       item.thumb_w240 =
-        "https://firebasestorage.googleapis.com/v0/b/api-01-ht.appspot.com/o/default%2Fitem%2Fitem-default-image-thumb-480x270.png?alt=media&token=7120d3cf-b8cf-453e-ac59-f9d7b54cbe70";
+        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-240w.jpg";
       item.thumb_w60 =
-        "https://firebasestorage.googleapis.com/v0/b/api-01-ht.appspot.com/o/default%2Fitem%2Fitem-default-image-placeholder.png?alt=media&token=224871de-cb60-4367-95b4-c05f237b97cc";
+        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-60w.jpg";
       item.gifURL = "";
       // Merge with always updated data
       item = Object.assign(this._updatedData(), item);
