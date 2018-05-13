@@ -265,6 +265,7 @@ class HTItemEditor extends LitElement {
         .get();
       let data = snapshot.data();
       let usersData = {
+        userId: userId,
         displayName: data.displayName,
         nickname: data.nickname,
         verified: data.verified,
