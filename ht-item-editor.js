@@ -113,7 +113,7 @@ class HTItemEditor extends LitElement {
         <section>
           <h3>Превью</h3>
             <paper-input id="demo" label="Demo URL"></paper-input>
-            <paper-input id="youtube" label="YouTube URL"></paper-input>
+            <paper-input id="youtube" label="YouTube videoID"></paper-input>
           <section>
             <h4>Изображение</h4>
             <ht-item-editor-preview id="preview"></ht-item-editor-preview>
@@ -217,7 +217,7 @@ class HTItemEditor extends LitElement {
         .querySelector("#description")
         .setData(itemData.description);
       this.shadowRoot.querySelector("#demo").value = itemData.demoURL;
-      this.shadowRoot.querySelector("#youtube").value = itemData.youtubeURL;
+      this.shadowRoot.querySelector("#youtube").value = itemData.videoId;
       this.shadowRoot.querySelector("#preview").reset();
       this.shadowRoot.querySelector("#preview").src = itemData.thumb_w960;
       this.shadowRoot.querySelector("#gif").reset();
@@ -241,7 +241,7 @@ class HTItemEditor extends LitElement {
       item.published = this.shadowRoot.querySelector("#published").checked;
       item.repositoryURL = this.shadowRoot.querySelector("#github").value || "";
       item.demoURL = this.shadowRoot.querySelector("#demo").value || "";
-      item.youtubeURL = this.shadowRoot.querySelector("#youtube").value || "";
+      item.videoId = this.shadowRoot.querySelector("#youtube").value || "";
       item.description = this.shadowRoot
         .querySelector("#description")
         .getData();
