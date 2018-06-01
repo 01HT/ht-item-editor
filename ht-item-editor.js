@@ -180,7 +180,7 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector("#youtube").value = "";
       this.shadowRoot.querySelector("#preview").reset();
       this.shadowRoot.querySelector("#gif").reset();
-      this.shadowRoot.querySelector("#license").selected = [];
+      this.shadowRoot.querySelector("#license").selected = {};
       this.shadowRoot.querySelector("#categories").selected = [];
       this.shadowRoot.querySelector("#attributes").selected = [];
       this.shadowRoot.querySelector("#tags").selected = [];
@@ -246,6 +246,7 @@ class HTItemEditor extends LitElement {
         .querySelector("#description")
         .getData();
       item.license = this.shadowRoot.querySelector("#license").selected;
+      console.log(item.license);
       item.price = this.shadowRoot.querySelector("#license").getPrice();
       item.categories = this.shadowRoot.querySelector("#categories").selected;
       item.attributes = this.shadowRoot.querySelector("#attributes").selected;
