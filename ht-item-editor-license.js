@@ -155,7 +155,7 @@ class HTItemEditorLicense extends LitElement {
   }
 
   get selected() {
-    let selected = [];
+    let selected = {};
     this.selectedLicensetypes.forEach(item => {
       if (!item.free) {
         item.price = this.shadowRoot.querySelector(
@@ -164,14 +164,17 @@ class HTItemEditorLicense extends LitElement {
         item.price = +item.price;
         if (item.price === undefined || item.price === "") item.price = 0;
       }
-      selected.push(item);
+      selected[item.licensetypeId] = item;
     });
     return selected;
   }
 
   set selected(selected) {
-    if (this.licensetypes.length === 0) return;
-    this.selectedLicensetypes = selected;
+    let license = [];
+    for (let licensetypeId in selected) {
+      license.push(selected[licensetypeId]);
+    }
+    this.selectedLicensetypes = license;
   }
 
   get select() {
