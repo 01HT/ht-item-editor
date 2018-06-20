@@ -5,7 +5,7 @@ import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 
 class HTItemEditorTags extends LitElement {
-  _render({ tags, selected }) {
+  _render({ tags, selectedTags }) {
     return html`
       <style>
         :host {
@@ -82,7 +82,7 @@ class HTItemEditorTags extends LitElement {
         </select>
         <div id="selected">
             ${repeat(
-              selected,
+              selectedTags,
               item =>
                 html`<div class="selected"><div class="name">${
                   item.name
@@ -104,14 +104,16 @@ class HTItemEditorTags extends LitElement {
   static get properties() {
     return {
       tags: Array,
-      selected: Array
+      selectedTags: Array,
+      selected: Object
     };
   }
 
   constructor() {
     super();
     this.tags = [];
-    this.selected = [];
+    this.selectedTags = [];
+    this.selected = {};
     this._getTags();
   }
 
@@ -121,27 +123,25 @@ class HTItemEditorTags extends LitElement {
 
   ready() {
     super.ready();
-    this.select.addEventListener("change", e => {
+    this.select.addEventListener("change", _ => {
       this._onSelect();
     });
   }
 
-  _onSelect() {
-    let selected = Object.assign([], this.selected);
-    let selectedIndex = this.select.options.selectedIndex;
-    let selectedItem = this.select.options[selectedIndex];
-    let tagId = selectedItem.data.tagId;
-    let isExist = false;
-    this.selected.forEach(tag => {
-      if (tag.tagId === tagId) isExist = true;
+  get selected() {
+    let selected = {};
+    this.selectedTags.forEach(tag => {
+      selected[tag.tagId] = tag;
     });
-    if (!isExist) selected.push(selectedItem.data);
-    this.selected = selected;
-    this.select.options.selectedIndex = 0;
+    return selected;
   }
 
-  getSelected() {
-    return this.selected;
+  set selected(tags) {
+    let selectedTags = [];
+    for (let tagId in tags) {
+      selectedTags.push(tags[tagId]);
+    }
+    this.selectedTags = selectedTags;
   }
 
   async _getTags() {
@@ -158,13 +158,28 @@ class HTItemEditorTags extends LitElement {
     this.tags = tags;
   }
 
-  _removeItem(e) {
-    let selected = [];
-    let tagId = e.target.tagId;
-    this.selected.forEach(item => {
-      if (item.tagId !== tagId) selected.push(item);
+  _onSelect() {
+    let selectedTags = Object.assign([], this.selectedTags);
+    let selectedIndex = this.select.options.selectedIndex;
+    let selectedItem = this.select.options[selectedIndex];
+    let tagId = selectedItem.data.tagId;
+    let isExist = false;
+    selectedTags.forEach(tag => {
+      console.log(tag);
+      if (tag.tagId === tagId) isExist = true;
     });
-    this.selected = selected;
+    if (!isExist) selectedTags.push(selectedItem.data);
+    this.selectedTags = selectedTags;
+    this.select.options.selectedIndex = 0;
+  }
+
+  _removeItem(e) {
+    let selectedTags = [];
+    let tagId = e.target.tagId;
+    this.selectedTags.forEach(item => {
+      if (item.tagId !== tagId) selectedTags.push(item);
+    });
+    this.selectedTags = selectedTags;
   }
 }
 

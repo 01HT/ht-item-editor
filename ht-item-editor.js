@@ -181,9 +181,9 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector("#preview").reset();
       this.shadowRoot.querySelector("#gif").reset();
       this.shadowRoot.querySelector("#license").selected = {};
-      this.shadowRoot.querySelector("#categories").selected = [];
-      this.shadowRoot.querySelector("#attributes").selected = [];
-      this.shadowRoot.querySelector("#tags").selected = [];
+      this.shadowRoot.querySelector("#categories").selected = {};
+      this.shadowRoot.querySelector("#attributes").selected = {};
+      this.shadowRoot.querySelector("#tags").selected = {};
     } catch (err) {
       console.log("_setDefaultData: " + err.message);
     }
@@ -246,7 +246,6 @@ class HTItemEditor extends LitElement {
         .querySelector("#description")
         .getData();
       item.license = this.shadowRoot.querySelector("#license").selected;
-      console.log(item.license);
       item.price = this.shadowRoot.querySelector("#license").getPrice();
       item.categories = this.shadowRoot.querySelector("#categories").selected;
       item.attributes = this.shadowRoot.querySelector("#attributes").selected;
@@ -282,8 +281,8 @@ class HTItemEditor extends LitElement {
     try {
       // Data that use only when create doc
       let item = {};
-      status: "moderation";
-      statusText: "Рассматривается модератором";
+      item.status = "moderation";
+      item.statusText = "Рассматривается модератором";
       item.published = false;
       item.created = firebase.firestore.FieldValue.serverTimestamp();
       item.nameInURL =
@@ -291,16 +290,6 @@ class HTItemEditor extends LitElement {
       item.authorId = firebase.auth().currentUser.uid;
       item.usersData = await this._getUsersData(item.authorId);
       item.sales = 0;
-      https: item.imageURL =
-        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image.jpg";
-      item.thumb_w960 =
-        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-960w.jpg";
-      item.thumb_w480 =
-        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-480w.jpg";
-      item.thumb_w240 =
-        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-240w.jpg";
-      item.thumb_w60 =
-        "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-60w.jpg";
       item.gifURL = "";
       // Merge with always updated data
       item = Object.assign(this._updatedData(), item);

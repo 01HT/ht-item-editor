@@ -147,10 +147,37 @@ class HTItemEditorPreview extends LitElement {
     }
   }
 
+  async _setDefaultImage(itemId) {
+    try {
+      const updates = {
+        imageURL:
+          "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image.jpg",
+        thumb_w960:
+          "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-960w.jpg",
+        thumb_w480:
+          "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-480w.jpg",
+        thumb_w240:
+          "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-240w.jpg",
+        thumb_w60:
+          "https://storage.googleapis.com/api-01-ht.appspot.com/default/item/item-default-image-60w.jpg"
+      };
+      await firebase
+        .firestore()
+        .collection("items")
+        .doc(itemId)
+        .update(updates);
+    } catch (err) {
+      console.log("_setDefaultImage: " + err.message);
+    }
+  }
+
   async save(itemId) {
     try {
       let file = this._getImageFile();
-      if (file === undefined) return;
+      if (file === undefined && this.src === "") {
+        await this._setDefaultImage(itemId);
+        return;
+      }
       await this._uploadImage(file, itemId);
     } catch (error) {
       console.log("save: " + error.message);

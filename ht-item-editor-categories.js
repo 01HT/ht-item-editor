@@ -36,13 +36,13 @@ class HTItemEditorCategories extends LitElement {
 
   static get properties() {
     return {
-      selected: Array
+      selected: Object
     };
   }
 
   constructor() {
     super();
-    this.selected = [];
+    this.selected = {};
     this.categoriesElements = [];
     this._getCategories();
     this.addEventListener("category-selected", e => {
@@ -51,9 +51,9 @@ class HTItemEditorCategories extends LitElement {
   }
 
   get selected() {
-    let selected = [];
+    let selected = {};
     this.categoriesElements.forEach(elem => {
-      if (elem.selected) selected.push(elem.data);
+      if (elem.selected) selected[elem.data.categoryId] = elem.data;
     });
     return selected;
   }
@@ -66,8 +66,8 @@ class HTItemEditorCategories extends LitElement {
       )
         return;
       this.unselectCategory();
-      for (let category of categories) {
-        await this.selectCategory(category.categoryId);
+      for (let categoryId in categories) {
+        await this.selectCategory(categoryId);
       }
     })();
   }
@@ -118,7 +118,7 @@ class HTItemEditorCategories extends LitElement {
         categories: Object.assign([], categories)
       })
     );
-    this.selected = Object.assign([], this.selected);
+    this.selected = Object.assign({}, this.selected);
   }
 
   _getChildCategories(categoryId, categories) {

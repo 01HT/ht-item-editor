@@ -36,13 +36,13 @@ class HTItemEditorAttributes extends LitElement {
 
   static get properties() {
     return {
-      selected: Array
+      selected: Object
     };
   }
 
   constructor() {
     super();
-    this.selected = [];
+    this.selected = {};
     this.categoriesElements = [];
     this._getCategories();
     this.addEventListener("category-selected", e => {
@@ -51,14 +51,14 @@ class HTItemEditorAttributes extends LitElement {
   }
 
   get selected() {
-    let selected = [];
+    let selected = {};
     this.categoriesElements.forEach(elem => {
-      if (elem.selected) selected.push(elem.data);
+      if (elem.selected) selected[elem.data.attributeId] = elem.data;
     });
     return selected;
   }
 
-  set selected(categories) {
+  set selected(attributes) {
     (async () => {
       if (
         this.categoriesElements === undefined ||
@@ -66,24 +66,24 @@ class HTItemEditorAttributes extends LitElement {
       )
         return;
       this.unselectCategory();
-      for (let category of categories) {
-        await this.selectCategory(category.categoryId);
+      for (let attributeId in attributes) {
+        await this.selectCategory(attributeId);
       }
     })();
   }
 
   async categoryChange(e) {
     let selected = e.detail.selected;
-    let categoryId = e.detail.data.categoryId;
-    if (selected) this.selectCategory(categoryId);
+    let attributeId = e.detail.data.attributeId;
+    if (selected) this.selectCategory(attributeId);
   }
 
-  async selectCategory(categoryId) {
+  async selectCategory(attributeId) {
     for (let elem of this.categoriesElements) {
-      let elemCategoryId = elem.data.categoryId;
+      let elemAttributeId = elem.data.attributeId;
       let elemParentId = elem.data.parentId;
-      if (categoryId === elemCategoryId && elemParentId !== "root") {
-        if (elemCategoryId !== "root" && elemParentId !== "") {
+      if (attributeId === elemAttributeId && elemParentId !== "root") {
+        if (elemAttributeId !== "root" && elemParentId !== "") {
           elem.selected = true;
           await this.selectCategory(elemParentId);
         }
@@ -105,24 +105,24 @@ class HTItemEditorAttributes extends LitElement {
       .get();
     snapshot.forEach(doc => {
       let data = doc.data();
-      data.categoryId = doc.id;
+      data.attributeId = doc.id;
       categories.push(data);
     });
     this.shadowRoot.querySelector("#tree").appendChild(
       await this._buildBranch({
         name: "Атрибуты",
-        categoryId: "root",
+        attributeId: "root",
         parentId: "",
         categories: Object.assign([], categories)
       })
     );
-    this.selected = Object.assign([], this.selected);
+    this.selected = Object.assign({}, this.selected);
   }
 
-  _getChildCategories(categoryId, categories) {
+  _getChildCategories(attributeId, categories) {
     let childCategories = [];
     categories.forEach(category => {
-      if (category.parentId === categoryId) childCategories.push(category);
+      if (category.parentId === attributeId) childCategories.push(category);
     });
     return childCategories;
   }
@@ -134,14 +134,14 @@ class HTItemEditorAttributes extends LitElement {
     this.categoriesElements.push(item);
     item.data = {
       name: options.name,
-      categoryId: options.categoryId,
+      attributeId: options.attributeId,
       parentId: options.parentId
     };
     for (let category of options.categories) {
-      if (category.parentId === options.categoryId) {
+      if (category.parentId === options.attributeId) {
         let branch = await this._buildBranch({
           name: category.name,
-          categoryId: category.categoryId,
+          attributeId: category.attributeId,
           parentId: category.parentId,
           categories: options.categories
         });
