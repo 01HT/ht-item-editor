@@ -3,14 +3,14 @@ import { LitElement, html } from "@polymer/lit-element";
 import "@polymer/paper-spinner/paper-spinner.js";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-toggle-button/paper-toggle-button.js";
-import "ht-wysiwyg/ht-wysiwyg.js";
-import "ht-item-editor/ht-item-editor-status.js";
-import "ht-item-editor/ht-item-editor-preview.js";
-import "ht-item-editor/ht-item-editor-gif.js";
-import "ht-item-editor/ht-item-editor-license.js";
-import "ht-item-editor/ht-item-editor-categories.js";
-import "ht-item-editor/ht-item-editor-attributes.js";
-import "ht-item-editor/ht-item-editor-tags.js";
+import "@01ht/ht-wysiwyg";
+import "./ht-item-editor-status.js";
+import "./ht-item-editor-preview.js";
+import "./ht-item-editor-gif.js";
+import "./ht-item-editor-license.js";
+import "./ht-item-editor-categories.js";
+import "./ht-item-editor-attributes.js";
+import "./ht-item-editor-tags.js";
 class HTItemEditor extends LitElement {
   _render({ itemId, loading, loadingText }) {
     return html`

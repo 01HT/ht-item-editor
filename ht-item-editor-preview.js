@@ -4,7 +4,7 @@ import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/iron-icon/iron-icon";
 import "@polymer/paper-button/paper-button";
 import "@polymer/paper-icon-button/paper-icon-button.js";
-import { callFirebaseHTTPFunction } from "ht-client-helper-functions";
+import { callFirebaseHTTPFunction } from "@01ht/ht-client-helper-functions";
 
 class HTItemEditorPreview extends LitElement {
   _render({ src }) {
