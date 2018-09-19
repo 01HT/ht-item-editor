@@ -4,7 +4,7 @@ import "@polymer/paper-checkbox/paper-checkbox.js";
 import "./ht-item-editor-categories-category-item.js";
 
 class HTItemEditorCategories extends LitElement {
-  _render() {
+  render() {
     return html`
       <style>
         :host {
@@ -36,7 +36,7 @@ class HTItemEditorCategories extends LitElement {
 
   static get properties() {
     return {
-      selected: Object
+      selected: { type: Object }
     };
   }
 
@@ -115,6 +115,7 @@ class HTItemEditorCategories extends LitElement {
         name: "Категории",
         categoryId: "root",
         parentId: "",
+        imageURL: null,
         categories: Object.assign([], categories)
       })
     );
@@ -137,7 +138,8 @@ class HTItemEditorCategories extends LitElement {
     item.data = {
       name: options.name,
       categoryId: options.categoryId,
-      parentId: options.parentId
+      parentId: options.parentId,
+      imageURL: options.imageURL || null
     };
     for (let category of options.categories) {
       if (category.parentId === options.categoryId) {
@@ -145,7 +147,8 @@ class HTItemEditorCategories extends LitElement {
           name: category.name,
           categoryId: category.categoryId,
           parentId: category.parentId,
-          categories: options.categories
+          categories: options.categories,
+          imageURL: category.imageURL || null
         });
         item.appendChild(branch);
       }

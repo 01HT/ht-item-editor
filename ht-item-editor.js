@@ -1,18 +1,25 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
-import "@polymer/paper-spinner/paper-spinner.js";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-toggle-button/paper-toggle-button.js";
 import "@01ht/ht-wysiwyg";
+import "@01ht/ht-spinner";
 import "./ht-item-editor-status.js";
-import "./ht-item-editor-preview.js";
-import "./ht-item-editor-gif.js";
+import "./ht-item-editor-author.js";
+import "./ht-item-editor-image.js";
+import "./ht-item-editor-image-slider.js";
+import "./ht-item-editor-animated-image.js";
+import "./ht-item-editor-youtube.js";
+import "./ht-item-editor-preview-mode.js";
 import "./ht-item-editor-license.js";
 import "./ht-item-editor-categories.js";
 import "./ht-item-editor-attributes.js";
 import "./ht-item-editor-tags.js";
+import "./cloudinary-widget.js";
+
 class HTItemEditor extends LitElement {
-  _render({ itemId, loading, loadingText }) {
+  render() {
+    const { itemId, loading, loadingText } = this;
     return html`
       <style>
         :host {
@@ -29,7 +36,7 @@ class HTItemEditor extends LitElement {
         }
 
         section {
-          margin-top:16px;
+          margin-top:32px;
         }
         
         paper-toggle-button {
@@ -41,93 +48,65 @@ class HTItemEditor extends LitElement {
           max-width: 500px;
         }
 
-        #loading-container {
-          position: absolute;
-          top:0;
-          left:0;
-          right:0;
-          bottom:0;
-          display:flex;
-          justify-content: center;
-          align-items:center;
-        }
-
-        #loading {
-          display:flex;
-          background: rgba(0, 0, 0, 0.5);
-          z-index:1;
-          background: #fff;
-          padding:16px;
-          border-radius:3px;
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12),
-          0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        }
-
-        #loading-text {
-          font-size: 14px;
-          margin-left: 8px;
-          line-height: 24px;
-          font-weight: 400;
-          color:var(--secondary-text-color);
-        }
-
-        paper-spinner {
-          width: 24px;
-          height: 24px;
-        }
-
         #actions {
           display: flex;
           justify-content: flex-end;
           margin-top:32px;
         }
 
-        [hidden] {
-          display:none !important;
+        #container[hidden], #status[hidden], #published[hidden], ht-spinner[hidden] {
+          display:none;
         }
       </style>
-      <div id="loading-container" hidden?=${!loading}>
-        <div id="loading">
-          <paper-spinner active></paper-spinner>
-          <div id="loading-text">${loadingText}</div>
-        </div>
-      </div>
-      <div id="container" hidden?=${loading}>
+      <ht-spinner page text=${loadingText} ?hidden=${!loading}></ht-spinner>
+      <div id="container" ?hidden=${loading}>
         <h1>${itemId === "" ? "Добавить продукт" : "Настроки продукта"}</h1>
-        <ht-item-editor-status id="status" hidden?=${
-          !itemId === "" ? false : true
-        }></ht-item-editor-status>
-        <paper-toggle-button id="published" hidden?=${
-          !itemId === "" ? false : true
-        }>Отображать в каталоге</paper-toggle-button>
+        <ht-item-editor-status id="status" ?hidden=${itemId ===
+          ""}></ht-item-editor-status>
+        <paper-toggle-button id="published" ?hidden=${itemId ===
+          ""}>Отображать в каталоге</paper-toggle-button>
         <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="50"></paper-input>
         <paper-input id="name-in-url" label="Название в URL" placeholder="my-super-item-7" allowed-pattern="^[0-9a-z\-]+$" char-counter maxlength="100"></paper-input>
         <paper-input id="github" label="Ссылка на репозиторий" placeholder="author/repository">
             <div slot="prefix">https://github.com/</div>
         </paper-input>
         <section>
+          <h3>Автор</h3>
+          <ht-item-editor-author id="author"></ht-item-editor-author>
+        </section>
+        <section>
           <h3>Описание</h3>
           <ht-wysiwyg id="description"></ht-wysiwyg>
         </section>
         <section>
           <h3>Превью</h3>
-            <paper-input id="demo" label="Demo URL"></paper-input>
-            <paper-input id="youtube" label="YouTube videoID"></paper-input>
-          <section>
-            <h4>Изображение</h4>
-            <ht-item-editor-preview id="preview"></ht-item-editor-preview>
-          </section>
-          <section>
-            <h3>Gif</h3>
-            <ht-item-editor-gif id="gif"></ht-item-editor-gif>
-          </section>
+          <paper-input id="demo" label="Demo URL"></paper-input>
+        <section>
+          <h4>Изображение (обязательно)</h4>
+          <ht-item-editor-image id="image"></ht-item-editor-image>
+        </section>
+        <section>
+          <h4>Слайдер изображений</h4>
+          <ht-item-editor-image-slider id="slider"></ht-item-editor-image-slider>
+        </section>
+        <section>
+          <h4>Анимированное изображение</h4>
+          <ht-item-editor-animated-image id="animated"></ht-item-editor-animated-image>
+        </section>
+        <section>
+          <h4>YouTube видео</h4>
+          <ht-item-editor-youtube id="youtube"></ht-item-editor-youtube>
+        </section>
+        <section>
+          <h4>Используемое по умолчанию превью</h4>
+          <ht-item-editor-preview-mode id="mode"></ht-item-editor-preview-mode>
+        </section>
         <section>
           <h3>Лицензии</h3>
           <ht-item-editor-license id="license"></ht-item-editor-license>
         </section>
         <section>
-          <h3>Категории</h3>
+          <h3>Категория</h3>
           <ht-item-editor-categories id="categories"></ht-item-editor-categories>
         </section>
         <section>
@@ -139,7 +118,7 @@ class HTItemEditor extends LitElement {
           <ht-item-editor-tags id="tags"></ht-item-editor-tags>
         </section>
         <section id="actions">
-          <paper-button on-click=${e => {
+          <paper-button @click=${e => {
             itemId === "" ? this.add() : this.save();
           }}>${itemId === "" ? "Добавить" : "Сохранить"}</paper-button>
         </section>
@@ -153,9 +132,9 @@ class HTItemEditor extends LitElement {
 
   static get properties() {
     return {
-      itemId: String,
-      loading: Boolean,
-      loadingText: String
+      itemId: { type: String },
+      loading: { type: Boolean },
+      loadingText: { type: String }
     };
   }
 
@@ -164,29 +143,6 @@ class HTItemEditor extends LitElement {
     this.itemId = "";
     this.loading = true;
     this.loadingText = "Загрузка данных";
-  }
-
-  async _setDefaultData() {
-    try {
-      this.shadowRoot.querySelector("#status").statusText =
-        "Добавление продукта";
-      this.shadowRoot.querySelector("#published").checked = true;
-      this.shadowRoot.querySelector("#published").disabled = true;
-      this.shadowRoot.querySelector("#name").value = "";
-      this.shadowRoot.querySelector("#name-in-url").value = "";
-      this.shadowRoot.querySelector("#github").value = "";
-      await this.shadowRoot.querySelector("#description").setDefaultData();
-      this.shadowRoot.querySelector("#demo").value = "";
-      this.shadowRoot.querySelector("#youtube").value = "";
-      this.shadowRoot.querySelector("#preview").reset();
-      this.shadowRoot.querySelector("#gif").reset();
-      this.shadowRoot.querySelector("#license").selected = {};
-      this.shadowRoot.querySelector("#categories").selected = {};
-      this.shadowRoot.querySelector("#attributes").selected = {};
-      this.shadowRoot.querySelector("#tags").selected = {};
-    } catch (err) {
-      console.log("_setDefaultData: " + err.message);
-    }
   }
 
   async _getItemData(itemId) {
@@ -203,25 +159,48 @@ class HTItemEditor extends LitElement {
     }
   }
 
+  async _setDefaultData() {
+    try {
+      this.shadowRoot.querySelector("#status").statusText = "Добавление";
+      this.shadowRoot.querySelector("#published").checked = false;
+      this.shadowRoot.querySelector("#name").value = "";
+      this.shadowRoot.querySelector("#name-in-url").value = "";
+      this.shadowRoot.querySelector("#github").value = "";
+      this.shadowRoot.querySelector("#author").reset();
+      this.shadowRoot.querySelector("#description").setDefaultData();
+      this.shadowRoot.querySelector("#demo").value = "";
+      this.shadowRoot.querySelector("#image").reset();
+      this.shadowRoot.querySelector("#slider").reset();
+      this.shadowRoot.querySelector("#animated").reset();
+      this.shadowRoot.querySelector("#youtube").reset();
+      this.shadowRoot.querySelector("#mode").reset();
+      this.shadowRoot.querySelector("#license").selected = {};
+      this.shadowRoot.querySelector("#categories").selected = {};
+      this.shadowRoot.querySelector("#attributes").selected = {};
+      this.shadowRoot.querySelector("#tags").selected = {};
+    } catch (err) {
+      console.log("_setDefaultData: " + err.message);
+    }
+  }
+
   async _setItemData(itemId) {
     try {
       let itemData = await this._getItemData(itemId);
       this.shadowRoot.querySelector("#status").statusText = itemData.statusText;
       this.shadowRoot.querySelector("#published").checked = itemData.published;
-      if (itemData.status === "moderation")
-        this.shadowRoot.querySelector("#published").disabled = true;
       this.shadowRoot.querySelector("#name").value = itemData.name;
       this.shadowRoot.querySelector("#name-in-url").value = itemData.nameInURL;
       this.shadowRoot.querySelector("#github").value = itemData.repositoryURL;
+      this.shadowRoot.querySelector("#author").data = itemData.authorData;
       this.shadowRoot
         .querySelector("#description")
         .setData(itemData.description);
       this.shadowRoot.querySelector("#demo").value = itemData.demoURL;
-      this.shadowRoot.querySelector("#youtube").value = itemData.videoId;
-      this.shadowRoot.querySelector("#preview").reset();
-      this.shadowRoot.querySelector("#preview").src = itemData.thumb_w960;
-      this.shadowRoot.querySelector("#gif").reset();
-      this.shadowRoot.querySelector("#gif").src = itemData.gifURL;
+      this.shadowRoot.querySelector("#image").data = itemData.image;
+      this.shadowRoot.querySelector("#slider").data = itemData.slider;
+      this.shadowRoot.querySelector("#animated").data = itemData.animated;
+      this.shadowRoot.querySelector("#youtube").data = itemData.youtube;
+      this.shadowRoot.querySelector("#mode").data = itemData.previewMode;
       this.shadowRoot.querySelector("#license").selected = itemData.license;
       this.shadowRoot.querySelector("#categories").selected =
         itemData.categories;
@@ -233,95 +212,41 @@ class HTItemEditor extends LitElement {
     }
   }
 
-  _updatedData() {
+  async add() {
     try {
+      this.loading = true;
+      this.loadingText = "Создание продукта";
       let item = {};
+      item.created = firebase.firestore.FieldValue.serverTimestamp();
       item.updated = firebase.firestore.FieldValue.serverTimestamp();
+      item.status = "moderation";
+      item.statusText = "Рассматривается модератором";
+      item.published = false;
+      item.ownerId = firebase.auth().currentUser.uid;
       item.name = this.shadowRoot.querySelector("#name").value || "";
-      item.published = this.shadowRoot.querySelector("#published").checked;
+      item.nameInURL =
+        this.shadowRoot.querySelector("#name-in-url").value || "";
       item.repositoryURL = this.shadowRoot.querySelector("#github").value || "";
-      item.demoURL = this.shadowRoot.querySelector("#demo").value || "";
-      item.videoId = this.shadowRoot.querySelector("#youtube").value || "";
       item.description = this.shadowRoot
         .querySelector("#description")
         .getData();
+      item.demoURL = this.shadowRoot.querySelector("#demo").value || "";
+      item.image = this.shadowRoot.querySelector("#image").data || {};
+      item.slider = this.shadowRoot.querySelector("#slider").data || {};
+      item.animated = this.shadowRoot.querySelector("#animated").data || {};
+      item.youtube = this.shadowRoot.querySelector("#youtube").data || "";
+      item.previewMode = this.shadowRoot.querySelector("#mode").data;
       item.license = this.shadowRoot.querySelector("#license").selected;
       item.price = this.shadowRoot.querySelector("#license").getPrice();
       item.categories = this.shadowRoot.querySelector("#categories").selected;
       item.attributes = this.shadowRoot.querySelector("#attributes").selected;
       item.tags = this.shadowRoot.querySelector("#tags").selected;
-      return item;
-    } catch (err) {
-      console.log("_updatedData: " + err.message);
-    }
-  }
-
-  async _getUsersData(userId) {
-    try {
-      let snapshot = await firebase
-        .firestore()
-        .collection("users")
-        .doc(userId)
-        .get();
-      let data = snapshot.data();
-      let usersData = {
-        userId: userId,
-        displayName: data.displayName,
-        nickname: data.nickname,
-        verified: data.verified,
-        photoURL: data.photoURL
-      };
-      return usersData;
-    } catch (err) {
-      console.log("_getUsersData: " + err.message);
-    }
-  }
-
-  async _addDoc() {
-    try {
-      // Data that use only when create doc
-      let item = {};
-      item.status = "moderation";
-      item.statusText = "Рассматривается модератором";
-      item.published = false;
-      item.created = firebase.firestore.FieldValue.serverTimestamp();
-      item.nameInURL =
-        this.shadowRoot.querySelector("#name-in-url").value || "";
-      item.authorId = firebase.auth().currentUser.uid;
-      item.usersData = await this._getUsersData(item.authorId);
+      item.authorData = await this.shadowRoot.querySelector("#author").data;
       item.sales = 0;
-      item.gifURL = "";
-      // Merge with always updated data
-      item = Object.assign(this._updatedData(), item);
-      let snapshot = await firebase
-        .firestore()
-        .collection("items")
-        .add(item);
-      return snapshot.id;
-    } catch (err) {
-      console.log("_addDoc: " + err.message);
-    }
-  }
-
-  async _updateDoc(itemId, updates) {
-    try {
       await firebase
         .firestore()
         .collection("items")
-        .doc(itemId)
-        .update(updates);
-    } catch (err) {
-      console.log("_updateDoc: " + err.message);
-    }
-  }
-
-  async add() {
-    try {
-      this.loading = true;
-      this.loadingText = "Создание продукта";
-      let itemId = await this._addDoc();
-      await this.shadowRoot.querySelector("#preview").save(itemId);
-      await this.shadowRoot.querySelector("#gif").save(itemId);
+        .add(item);
       this.dispatchEvent(
         new CustomEvent("on-add", {
           bubbles: true,
@@ -339,12 +264,40 @@ class HTItemEditor extends LitElement {
       this.loading = true;
       this.loadingText = "Идет сохранение";
       let itemId = this.itemId;
-      let updates = await this._updatedData();
-      await this._updateDoc(itemId, updates);
-      await this.shadowRoot.querySelector("#preview").save(itemId);
-      await this.shadowRoot.querySelector("#gif").save(itemId);
+      let updates = {};
+      updates.updated = firebase.firestore.FieldValue.serverTimestamp();
+      updates.published = this.shadowRoot.querySelector("#published").checked;
+      updates.name = this.shadowRoot.querySelector("#name").value || "";
+      updates.nameInURL =
+        this.shadowRoot.querySelector("#name-in-url").value || "";
+      updates.repositoryURL =
+        this.shadowRoot.querySelector("#github").value || "";
+      updates.description = this.shadowRoot
+        .querySelector("#description")
+        .getData();
+      updates.demoURL = this.shadowRoot.querySelector("#demo").value || "";
+      updates.image = this.shadowRoot.querySelector("#image").data || {};
+      updates.slider = this.shadowRoot.querySelector("#slider").data || {};
+      updates.animated = this.shadowRoot.querySelector("#animated").data || {};
+      updates.youtube = this.shadowRoot.querySelector("#youtube").data || "";
+      updates.previewMode = this.shadowRoot.querySelector("#mode").data;
+      updates.license = this.shadowRoot.querySelector("#license").selected;
+      updates.price = this.shadowRoot.querySelector("#license").getPrice();
+      updates.categories = this.shadowRoot.querySelector(
+        "#categories"
+      ).selected;
+      updates.attributes = this.shadowRoot.querySelector(
+        "#attributes"
+      ).selected;
+      updates.tags = this.shadowRoot.querySelector("#tags").selected;
+      updates.authorData = await this.shadowRoot.querySelector("#author").data;
+      await firebase
+        .firestore()
+        .collection("items")
+        .doc(itemId)
+        .update(updates);
       this.dispatchEvent(
-        new CustomEvent("on-saved", {
+        new CustomEvent("on-updated", {
           bubbles: true,
           composed: true
         })

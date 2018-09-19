@@ -1,11 +1,12 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
-import { repeat } from "lit-html/lib/repeat.js";
+import { repeat } from "lit-html/directives/repeat.js";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 
 class HTItemEditorTags extends LitElement {
-  _render({ tags, selectedTags }) {
+  render() {
+    const { tags, selectedTags } = this;
     return html`
       <style>
         :host {
@@ -76,7 +77,7 @@ class HTItemEditorTags extends LitElement {
             ${repeat(
               tags,
               tag => html`
-                <option data=${tag}>${tag.name}</option>
+                <option .data=${tag}>${tag.name}</option>
           `
             )}
         </select>
@@ -86,9 +87,9 @@ class HTItemEditorTags extends LitElement {
               item =>
                 html`<div class="selected"><div class="name">${
                   item.name
-                }</div><paper-icon-button icon="ht-item-editor-tags-icons:close" tagId=${
+                }</div><paper-icon-button icon="ht-item-editor-tags-icons:close" .tagId=${
                   item.tagId
-                } on-click=${e => {
+                } @click=${e => {
                   this._removeItem(e);
                 }}></paper-icon-button></div>`
             )}
@@ -103,9 +104,9 @@ class HTItemEditorTags extends LitElement {
 
   static get properties() {
     return {
-      tags: Array,
-      selectedTags: Array,
-      selected: Object
+      tags: { type: Array },
+      selectedTags: { type: Array },
+      selected: { type: Object }
     };
   }
 
@@ -121,8 +122,7 @@ class HTItemEditorTags extends LitElement {
     return this.shadowRoot.querySelector("select");
   }
 
-  ready() {
-    super.ready();
+  firstUpdated() {
     this.select.addEventListener("change", _ => {
       this._onSelect();
     });

@@ -5,7 +5,8 @@ import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
 class HTItemEditorCategoriesCategoryItem extends LitElement {
-  _render({ data, opened, selected }) {
+  render() {
+    const { data, opened, selected } = this;
     return html`
       <style>
         :host {
@@ -89,6 +90,13 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
             display:none;
         }
 
+        img {
+          margin-right:8px;
+          display:block;
+          width:24px;
+          height:24px;
+        }
+
         [hidden] {
             display:none;
         }
@@ -108,21 +116,21 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
       </iron-iconset-svg>
       <div id="container">
           <div id="actions">
-              <paper-icon-button icon="ht-item-editor-categories-item:add-box" on-click=${e => {
+              <paper-icon-button icon="ht-item-editor-categories-item:add-box" @click=${e => {
                 this.open();
-              }} hidden?=${opened} hide?=${this.showBlockHidden()}></paper-icon-button>
-              <paper-icon-button icon="ht-item-editor-categories-item:indeterminate-check-box" on-click=${e => {
+              }} ?hidden=${opened} ?hide=${this.showBlockHidden()}></paper-icon-button>
+              <paper-icon-button icon="ht-item-editor-categories-item:indeterminate-check-box" @click=${e => {
                 this.close();
-              }} hidden?=${!opened} hide?=${this.showBlockHidden()}></paper-icon-button>
-          <div id="title" class$="${
+              }} ?hidden=${!opened} ?hide=${this.showBlockHidden()}></paper-icon-button>
+          <div id="title" class=${
             this.isRoot() ? "root" : ""
-          }" selected?=${selected} on-click=${e => {
+          } ?selected=${selected} @click=${e => {
       this.toggle(e);
-    }}>${
+    }}>${data.imageURL ? html`<img src=${data.imageURL}>` : ""}${
       data.name
-    } <iron-icon icon="ht-item-editor-categories-item:check-circle"></iron-icon></div>
+    } <!--<iron-icon icon="ht-item-editor-categories-item:check-circle"></iron-icon>--></div>
         </div>
-          <div hidden?=${!opened}>
+          <div ?hidden=${!opened}>
               <slot></slot>
           </div>
       </div>
@@ -134,14 +142,18 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
   }
 
   static get properties() {
-    return { data: Object, opened: Boolean, selected: Boolean };
+    return {
+      data: { type: Object },
+      opened: { type: Boolean },
+      selected: { type: Boolean }
+    };
   }
 
   constructor() {
     super();
     this.data = {};
-    this.opened = false;
-    this.selected = false;
+    // this.opened = false;
+    // this.selected = false;
   }
 
   isRoot() {

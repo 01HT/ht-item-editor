@@ -2,7 +2,8 @@
 import { LitElement, html } from "@polymer/lit-element";
 
 class HTItemEditorStatus extends LitElement {
-  _render({ statusText }) {
+  render() {
+    const { statusText } = this;
     return html`
       <style>
         :host {
@@ -25,7 +26,7 @@ class HTItemEditorStatus extends LitElement {
 
         #text {
             padding: 2px 6px;
-            background: #afd683;
+            background: #83b735;
             border-radius: 3px;
             color:#fff;
             font-size: 13px;

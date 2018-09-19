@@ -1,11 +1,12 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
-import { repeat } from "lit-html/lib/repeat.js";
+import { repeat } from "lit-html/directives/repeat.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 
 class HTItemEditorLicense extends LitElement {
-  _render({ licensetypes, selectedLicensetypes }) {
+  render() {
+    const { licensetypes, selectedLicensetypes } = this;
     return html`
       <style>
         :host {
@@ -90,7 +91,7 @@ class HTItemEditorLicense extends LitElement {
             ${repeat(
               licensetypes,
               item => html`
-                <option data=${item}>${item.name}</option>
+                <option .data=${item}>${item.name}</option>
           `
             )}
            
@@ -99,31 +100,29 @@ class HTItemEditorLicense extends LitElement {
             ${repeat(
               selectedLicensetypes,
               licensetype => html`
-                <div class="license-container" licensetypeId=${
+                <div class="license-container" .licensetypeId=${
                   licensetype.licensetypeId
                 }>
                   <div class="name">${licensetype.name}</div>
                   <div class="right">
-                      <div class="price" hidden?=${licensetype.free}>
+                      <div class="price" ?hidden=${licensetype.free}>
                           <span>$ </span>
-                          <input placeholder="Цена" id="id${
+                          <input placeholder="Цена" .id="id${
                             licensetype.licensetypeId
-                          }" value$=${licensetype.price}>
+                          }" .value=${licensetype.price || 0}>
                       </div>
-                      <paper-icon-button icon="ht-item-editor-license-icons:close" openSource=${
+                      <paper-icon-button icon="ht-item-editor-license-icons:close" .openSource=${
                         licensetype.openSource
-                      } licensetypeId=${
+                      } .licensetypeId=${
                 licensetype.licensetypeId
-              } on-click=${e => {
+              } @click=${e => {
                 this._removeItem(e);
               }}></paper-icon-button>
                   </div>
                 </div>
           `
             )}
-              
           </div>
-
         </div>
 `;
   }
@@ -134,8 +133,8 @@ class HTItemEditorLicense extends LitElement {
 
   static get properties() {
     return {
-      selectedLicensetypes: Array,
-      licensetypes: Array
+      selectedLicensetypes: { type: Array },
+      licensetypes: { type: Array }
     };
   }
 
@@ -146,8 +145,7 @@ class HTItemEditorLicense extends LitElement {
     this.selectedLicensetypes = [];
   }
 
-  ready() {
-    super.ready();
+  firstUpdated() {
     this.setLicensetypes();
     this.select.addEventListener("change", e => {
       this.changed();
