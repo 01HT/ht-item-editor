@@ -16,11 +16,11 @@
     "@polymer/paper-dialog-scrollable": "^3.0.1",
     "@polymer/paper-icon-button": "^3.0.1",
     "@polymer/paper-toggle-button": "^3.0.1",
-    "@01ht/ht-wysiwyg": "^1.0.0",
-    "@01ht/ht-storage": "^1.0.0",
-    "@01ht/ht-image": "^1.0.0",
-    "@01ht/ht-image-slider": "^1.0.0",
-    "@01ht/ht-animated-image": "^1.0.0",
-    "@01ht/ht-elements-item-youtube-preview": "^1.0.0"
+    "@01ht/ht-wysiwyg": "01ht/ht-wysiwyg",
+    "@01ht/ht-storage": "01ht/ht-storage",
+    "@01ht/ht-image": "01ht/ht-image",
+    "@01ht/ht-image-slider": "01ht/ht-image-slider",
+    "@01ht/ht-animated-image": "01ht/ht-animated-image",
+    "@01ht/ht-elements-item-youtube-preview": "01ht/ht-elements-item-youtube-preview"
   }
 }
