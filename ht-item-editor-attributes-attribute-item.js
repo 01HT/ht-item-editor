@@ -28,20 +28,17 @@ class HTItemEditorAttributesAttributeItem extends LitElement {
         }
 
         #title {
-            max-width: 160px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        #title {
-            display:flex;
-            align-items:center;
-            box-sizing:border-box;
-            border: 1px solid #fff;
-            border-radius: 6px;
-            padding: 4px 8px;
-            cursor: pointer;
+          max-width:200px;
+          display:inline;
+          line-height:24px;
+          font-size: 14px;
+          border: 1px solid #fff;
+          border-radius: 6px;
+          padding: 4px 8px;
+          cursor: pointer;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
 
         #title:hover {
@@ -69,7 +66,6 @@ class HTItemEditorAttributesAttributeItem extends LitElement {
         }
 
         #title[selected] {
-            display: flex;
             background: rgba(139, 195, 74, 0.19);
         }
 
@@ -95,6 +91,7 @@ class HTItemEditorAttributesAttributeItem extends LitElement {
           display:block;
           width:24px;
           height:24px;
+          float:left;
         }
 
         [hidden] {
@@ -133,6 +130,7 @@ class HTItemEditorAttributesAttributeItem extends LitElement {
           <div ?hidden=${!opened}>
               <slot></slot>
           </div>
+          
       </div>
       `;
   }

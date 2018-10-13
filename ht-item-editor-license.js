@@ -28,12 +28,13 @@ class HTItemEditorLicense extends LitElement {
 
         .license-container {
             width: 100%;
-            max-width: 280px;
+            max-width: 360px;
+            font-size: 15px;
             display: flex;
             justify-content: space-between;
             flex-direction: row;
             margin: 8px 0;
-            padding: 4px 4px 4px 16px;
+            padding: 8px 8px 8px 16px;
             align-items: center;
             border-radius: 2px;
             box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
@@ -64,7 +65,7 @@ class HTItemEditorLicense extends LitElement {
         }
         
         .name {
-            font-weight: 500;
+            font-weight: 400;
         }
 
         #selected {
@@ -188,7 +189,9 @@ class HTItemEditorLicense extends LitElement {
     snapshot.forEach(function(doc) {
       let data = doc.data();
       data.licensetypeId = doc.id;
-      licensetypes.push(data);
+      // All except extended license
+      if (data.licensetypeId !== "9dqs4FFuHxUFVoRHEKBI")
+        licensetypes.push(data);
     });
     licensetypes.sort((a, b) => {
       return a.index > b.index;

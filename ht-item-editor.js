@@ -21,31 +21,34 @@ class HTItemEditor extends LitElement {
   render() {
     const { itemId, loading, loadingText } = this;
     return html`
+      ${SharedStyles}
       <style>
-        :host {
-          display: block;
-          position:relative;
-          box-sizing:border-box;
+        h4 {
+          font-family: Roboto,sans-serif;
+          -moz-osx-font-smoothing: grayscale;
+          -webkit-font-smoothing: antialiased;
+          font-size: 1rem;
+          line-height: 1.5rem;
+          font-weight: 500;
+          letter-spacing: .0125em;
+          text-decoration: inherit;
+          text-transform: inherit;
         }
-
-        paper-button {
-          background: var(--accent-color);
-          margin:0;
-          color: #fff;
-          padding: 8px 16px;
-        }
-
+        
         section {
           margin-top:32px;
         }
         
-        paper-toggle-button {
-          margin-top:32px;
-          margin-bottom:8px;
+        ht-item-editor-status, paper-toggle-button {
+          margin: 16px 0;
         }
 
         paper-input {
           max-width: 500px;
+        }
+
+        .toggle-container {
+          display:flex;
         }
 
         #actions {
@@ -60,26 +63,30 @@ class HTItemEditor extends LitElement {
       </style>
       <ht-spinner page text=${loadingText} ?hidden=${!loading}></ht-spinner>
       <div id="container" ?hidden=${loading}>
-        <h1>${itemId === "" ? "Добавить продукт" : "Настроки продукта"}</h1>
+        <h1 class="mdc-typography--headline5">${
+          itemId === "" ? "Добавить элемент" : "Настроки элемента"
+        }</h1>
         <ht-item-editor-status id="status" ?hidden=${itemId ===
           ""}></ht-item-editor-status>
-        <paper-toggle-button id="published" ?hidden=${itemId ===
-          ""}>Отображать в каталоге</paper-toggle-button>
+        <div class="toggle-container">
+          <paper-toggle-button id="published" ?hidden=${itemId ===
+            ""}>Отображать в каталоге</paper-toggle-button>
+        </div>
         <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="50"></paper-input>
         <paper-input id="name-in-url" label="Название в URL" placeholder="my-super-item-7" allowed-pattern="^[0-9a-z\-]+$" char-counter maxlength="100"></paper-input>
         <paper-input id="github" label="Ссылка на репозиторий" placeholder="author/repository">
             <div slot="prefix">https://github.com/</div>
         </paper-input>
         <section>
-          <h3>Автор</h3>
+          <h3 class="mdc-typography--headline6">Автор</h3>
           <ht-item-editor-author id="author"></ht-item-editor-author>
         </section>
         <section>
-          <h3>Описание</h3>
+          <h3 class="mdc-typography--headline6">Описание</h3>
           <ht-wysiwyg id="description"></ht-wysiwyg>
         </section>
         <section>
-          <h3>Превью</h3>
+          <h3 class="mdc-typography--headline6">Превью</h3>
           <paper-input id="demo" label="Demo URL"></paper-input>
         <section>
           <h4>Изображение (обязательно)</h4>
