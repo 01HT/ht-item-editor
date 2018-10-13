@@ -57,6 +57,7 @@ class HTItemEditorTags extends LitElement {
         }
 
         .name {
+          font-size: 14px;
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
