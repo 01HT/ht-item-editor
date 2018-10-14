@@ -67,7 +67,7 @@ class HTItemEditorAuthor extends LitElement {
   }
 
   get data() {
-    console.log(this.select.options[this.select.selectedIndex].data);
+    //console.log(this.select.options[this.select.selectedIndex].data);
     return this.select.options[this.select.selectedIndex].data;
   }
 
