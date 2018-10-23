@@ -255,8 +255,7 @@ class HTItemEditorLicense extends LitElement {
   getPrice() {
     let price = 0;
     this.selectedLicensetypes.forEach(item => {
-      if (item.name === "Yunato Single") price = +item.price;
-      if (item.name === "Yunato Extended" && price === 0) price = +item.price;
+      if (item.name === "Single Commercial (SCLv1)") price = +item.price;
     });
     return price;
   }
