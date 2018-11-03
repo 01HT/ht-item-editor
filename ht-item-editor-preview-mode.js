@@ -31,7 +31,7 @@ class HTItemEditorPreviewMode extends LitElement {
         }
       </style>
         <div id="container">
-            <select value=${value} @change=${_ => {
+            <select .value=${value} @change=${_ => {
       this._onSelect();
     }}>
                 ${repeat(
