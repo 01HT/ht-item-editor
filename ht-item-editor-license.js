@@ -2,6 +2,7 @@
 import { LitElement, html } from "@polymer/lit-element";
 import { repeat } from "lit-html/directives/repeat.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
+import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 
 class HTItemEditorLicense extends LitElement {
@@ -58,10 +59,8 @@ class HTItemEditorLicense extends LitElement {
             margin-right: 4px;
         }
         
-        input {
+        paper-input {
             width: 70px;
-            padding: 4px;
-            font-size: 14px;
         }
         
         .name {
@@ -107,10 +106,11 @@ class HTItemEditorLicense extends LitElement {
                   <div class="name">${licensetype.name}</div>
                   <div class="right">
                       <div class="price" ?hidden=${licensetype.free}>
-                          <span>$ </span>
-                          <input placeholder="Цена" .id="id${
+                          <paper-input label="Цена" allowed-pattern="[0-9]" always-float-label placeholder="0" .id="id${
                             licensetype.licensetypeId
                           }" .value=${licensetype.price || 0}>
+                            <div slot="prefix">$ </div>
+                          </paper-input>
                       </div>
                       <paper-icon-button icon="ht-item-editor-license-icons:close" .openSource=${
                         licensetype.openSource
@@ -161,7 +161,8 @@ class HTItemEditorLicense extends LitElement {
           `#id${item.licensetypeId}`
         ).value;
         item.price = +item.price;
-        if (item.price === undefined || item.price === "") item.price = 0;
+        if (item.price === undefined || item.price === "" || item.price === 0)
+          item.price = 1;
       }
       selected[item.licensetypeId] = item;
     });
@@ -255,7 +256,11 @@ class HTItemEditorLicense extends LitElement {
   getPrice() {
     let price = 0;
     this.selectedLicensetypes.forEach(item => {
-      if (item.name === "Single Commercial (SCLv1)") price = +item.price;
+      // Single Commercial (SCLv1)
+      if (item.licensetypeId === "lprhp51XIs962tedCeyq") {
+        price = +item.price;
+        if (price === 0) price = 1;
+      }
     });
     return price;
   }

@@ -85,6 +85,7 @@ class HTItemEditorAuthor extends LitElement {
   }
 
   async reset() {
+    if (window.firebase.auth().currentUser === null) return;
     let promises = await Promise.all([
       this._getUsersData(),
       this._getOrganizations()
@@ -107,7 +108,9 @@ class HTItemEditorAuthor extends LitElement {
         displayName: data.displayName,
         verified: data.verified,
         avatar: data.avatar,
-        isOrg: false
+        isOrg: false,
+        userNumber: data.userNumber,
+        nameInURL: data.nameInURL
       };
       return usersData;
     } catch (err) {
@@ -131,7 +134,9 @@ class HTItemEditorAuthor extends LitElement {
           displayName: data.displayName,
           verified: data.verified,
           avatar: data.avatar,
-          isOrg: true
+          isOrg: true,
+          organizationNumber: data.organizationNumber,
+          nameInURL: data.nameInURL
         };
         items.push(item);
       });
