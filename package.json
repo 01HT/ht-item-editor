@@ -15,12 +15,14 @@
     "@polymer/paper-dialog": "^3.0.1",
     "@polymer/paper-dialog-scrollable": "^3.0.1",
     "@polymer/paper-icon-button": "^3.0.1",
+    "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/paper-toggle-button": "^3.0.1",
     "@01ht/ht-wysiwyg": "01ht/ht-wysiwyg",
     "@01ht/ht-storage": "01ht/ht-storage",
     "@01ht/ht-image": "01ht/ht-image",
     "@01ht/ht-image-slider": "01ht/ht-image-slider",
     "@01ht/ht-animated-image": "01ht/ht-animated-image",
-    "@01ht/ht-elements-item-youtube-preview": "01ht/ht-elements-item-youtube-preview"
+    "@01ht/ht-elements-item-youtube-preview": "01ht/ht-elements-item-youtube-preview",
+    "@01ht/ht-client-helper-functions": "01ht/ht-client-helper-functions"
   }
 }
