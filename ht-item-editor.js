@@ -56,6 +56,18 @@ class HTItemEditor extends LitElement {
           width: 100%;
         }
 
+        #metaDescriptionContainer {
+          display:flex;
+          align-items:center;
+          position:relative;
+          max-width: 500px;
+          width: 100%;
+        }
+
+        #meta-description {
+          margin-right: 32px;
+        }
+
         #nameInURLContainer {
           display:flex;
           align-items:center;
@@ -97,7 +109,8 @@ class HTItemEditor extends LitElement {
       <iron-iconset-svg size="24" name="ht-item-editor">
         <svg>
           <defs>
-              <g id="warning"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></g>   
+              <g id="warning"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></g>
+              <g id="info"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></g>
           </defs>
         </svg>
       </iron-iconset-svg>
@@ -112,12 +125,20 @@ class HTItemEditor extends LitElement {
           <paper-toggle-button id="published" ?hidden=${itemId ===
             ""}>Отображать в каталоге</paper-toggle-button>
         </div>
-        <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="50"></paper-input>
+        <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="60"></paper-input>
+        <div id="metaDescriptionContainer">
+          <div class="warning">
+              <a href="https://support.google.com/webmasters/answer/35624?hl=ru&visit_id=636849945150474069-113811972&rd=1" target="_blank" rel="noopener">
+                <iron-icon icon="ht-item-editor:info"></iron-icon>
+              </a>
+          </div>
+          <paper-input id="meta-description" label="Meta description" placeholder="Текстовый сниппет в поисковой выдаче" auto-validate char-counter maxlength="120"></paper-input>
+        </div>
         <div id="nameInURLContainer">
           <div class="warning">
               <iron-icon icon="ht-item-editor:warning"></iron-icon>
               <paper-tooltip>
-              Изменение влечет за собой изменение всех ссылок в которых задействован данный параметр. Существующие ссылки в интернете с параметром, станут недоступными и будут выдавать ошибку 404. Поисковым системам потребуется время для повторного индексирования ссылок и размещения информации в поисковой выдаче. Соответственно частое изменение данного параметра крайне не рекомендуется.
+              Изменение влечет за собой изменение всех ссылок в которых задействован данный параметр. Существующие ссылки в интернете с параметром, станут недоступными и будут выдавать ошибку 404. Поисковым системам потребуется время для повторного индексирования ссылок и размещения информации в поисковой выдаче. Соответственно изменять данный параметр крайне не рекомендуется.
             </paper-tooltip>
           </div>
           <paper-input id="name-in-url" label="Название в URL" placeholder="my-super-element-7" allowed-pattern="^[0-9a-z\-]+$" auto-validate char-counter maxlength="100">
@@ -222,6 +243,7 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector("#status").statusText = "Добавление";
       this.shadowRoot.querySelector("#published").checked = false;
       this.shadowRoot.querySelector("#name").value = "";
+      this.shadowRoot.querySelector("#meta-description").value = "";
       this.shadowRoot.querySelector("#name-in-url").value = "";
       this.shadowRoot.querySelector(
         "#name-in-url [slot='suffix']"
@@ -250,6 +272,8 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector("#status").statusText = itemData.statusText;
       this.shadowRoot.querySelector("#published").checked = itemData.published;
       this.shadowRoot.querySelector("#name").value = itemData.name;
+      this.shadowRoot.querySelector("#meta-description").value =
+        itemData.metaDescription;
       this.shadowRoot.querySelector("#name-in-url").value = itemData.nameInURL;
       this.shadowRoot.querySelector(
         "#name-in-url [slot='suffix']"
@@ -286,6 +310,8 @@ class HTItemEditor extends LitElement {
       item.published = false;
       item.ownerId = firebase.auth().currentUser.uid;
       item.name = this.shadowRoot.querySelector("#name").value || "No name";
+      item.metaDescription =
+        this.shadowRoot.querySelector("#meta-description").value || "";
       item.nameInURL =
         this.shadowRoot.querySelector("#name-in-url").value || "no-name";
       item.repositoryURL = this.shadowRoot.querySelector("#github").value || "";
@@ -352,6 +378,8 @@ class HTItemEditor extends LitElement {
       updates.updated = firebase.firestore.FieldValue.serverTimestamp();
       updates.published = this.shadowRoot.querySelector("#published").checked;
       updates.name = this.shadowRoot.querySelector("#name").value || "No name";
+      updates.metaDescription =
+        this.shadowRoot.querySelector("#meta-description").value || "";
       updates.nameInURL =
         this.shadowRoot.querySelector("#name-in-url").value || "no-name";
       updates.repositoryURL =
