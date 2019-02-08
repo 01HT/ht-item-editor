@@ -1,13 +1,10 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-input/paper-input.js";
 import "@01ht/ht-elements-item-youtube-preview";
 
 class HTItemEditorYoutube extends LitElement {
-  render() {
-    const { data } = this;
-    return html`
-      <style>
+  static styles = css`<style>
         :host {
           display: block;
           position:relative;
@@ -28,25 +25,25 @@ class HTItemEditorYoutube extends LitElement {
         paper-input {
           max-width: 500px;
         }
-      </style>
+      </style>`;
+
+  render() {
+    const { data } = this;
+    return html`
       <div id="container"> 
-        <paper-input id="youtube" label="YouTube videoID" value=${data} always-float-label placeholder="videoID" @keyup=${e => {
+        <paper-input id="youtube" label="YouTube videoID" value="${data}" always-float-label placeholder="videoID" @keyup="${e => {
       this._onInputKeyUp(e);
-    }}>
+    }}">
             <div slot="prefix">https://www.youtube.com/watch?v=</div>
         </paper-input>
         ${
           data && data !== ""
-            ? html`<ht-elements-item-youtube-preview .data=${data}></ht-elements-item-youtube-preview>`
+            ? html`<ht-elements-item-youtube-preview .data="${data}"></ht-elements-item-youtube-preview>`
             : ""
         }
         
       </div>
     `;
-  }
-
-  static get is() {
-    return "ht-item-editor-youtube";
   }
 
   static get properties() {
@@ -62,4 +59,4 @@ class HTItemEditorYoutube extends LitElement {
   }
 }
 
-customElements.define(HTItemEditorYoutube.is, HTItemEditorYoutube);
+customElements.define("ht-item-editor-youtube", HTItemEditorYoutube);

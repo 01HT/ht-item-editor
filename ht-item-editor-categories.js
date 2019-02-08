@@ -1,37 +1,34 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-checkbox/paper-checkbox.js";
 import "./ht-item-editor-categories-category-item.js";
 
 class HTItemEditorCategories extends LitElement {
+  static styles = css`<style>
+    :host {
+        display: block;
+        box-sizing:border-box;
+        position: relative;
+    }
+
+    #container {
+      margin-top: -16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #tree {
+      margin-left: -32px;
+    }
+  </style>`;
+
   render() {
     return html`
-      <style>
-        :host {
-            display: block;
-            box-sizing:border-box;
-            position: relative;
-        }
-
-        #container {
-          margin-top: -16px;
-          display: flex;
-          flex-direction: column;
-        }
-
-        #tree {
-          margin-left: -32px;
-        }
-      </style>
         <div id="container">
         <ul id="tree">
         </ul>
         </div>
       `;
-  }
-
-  static get is() {
-    return "ht-item-editor-categories";
   }
 
   static get properties() {
@@ -157,4 +154,4 @@ class HTItemEditorCategories extends LitElement {
   }
 }
 
-customElements.define(HTItemEditorCategories.is, HTItemEditorCategories);
+customElements.define("ht-item-editor-categories", HTItemEditorCategories);

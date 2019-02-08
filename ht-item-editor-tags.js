@@ -1,14 +1,11 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import { repeat } from "lit-html/directives/repeat.js";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 
 class HTItemEditorTags extends LitElement {
-  render() {
-    const { tags, selectedTags } = this;
-    return html`
-      <style>
+  static styles = css`<style>
         :host {
             display: block;
             box-sizing:border-box;
@@ -62,7 +59,11 @@ class HTItemEditorTags extends LitElement {
           text-overflow: ellipsis;
           overflow: hidden;
         }
-      </style>
+      </style>`;
+
+  render() {
+    const { tags, selectedTags } = this;
+    return html`
       <iron-iconset-svg size="24" name="ht-item-editor-tags-icons">
             <svg>
                 <defs>
@@ -78,7 +79,7 @@ class HTItemEditorTags extends LitElement {
             ${repeat(
               tags,
               tag => html`
-                <option .data=${tag}>${tag.name}</option>
+                <option .data="${tag}">${tag.name}</option>
           `
             )}
         </select>
@@ -88,19 +89,15 @@ class HTItemEditorTags extends LitElement {
               item =>
                 html`<div class="selected"><div class="name">${
                   item.name
-                }</div><paper-icon-button icon="ht-item-editor-tags-icons:close" .tagId=${
+                }</div><paper-icon-button icon="ht-item-editor-tags-icons:close" .tagId="${
                   item.tagId
-                } @click=${e => {
+                }" @click="${e => {
                   this._removeItem(e);
-                }}></paper-icon-button></div>`
+                }}"></paper-icon-button></div>`
             )}
         </div>
         </div>
       `;
-  }
-
-  static get is() {
-    return "ht-item-editor-tags";
   }
 
   static get properties() {
@@ -184,4 +181,4 @@ class HTItemEditorTags extends LitElement {
   }
 }
 
-customElements.define(HTItemEditorTags.is, HTItemEditorTags);
+customElements.define("ht-item-editor-tags", HTItemEditorTags);

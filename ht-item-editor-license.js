@@ -1,15 +1,12 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import { repeat } from "lit-html/directives/repeat.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 
 class HTItemEditorLicense extends LitElement {
-  render() {
-    const { licensetypes, selectedLicensetypes } = this;
-    return html`
-      <style>
+  static styles = css`<style>
         :host {
           display: block;
           position:relative;
@@ -74,7 +71,11 @@ class HTItemEditorLicense extends LitElement {
         [hidden] {
             display: none;
         }
-      </style>
+      </style>`;
+
+  render() {
+    const { licensetypes, selectedLicensetypes } = this;
+    return html`
       <iron-iconset-svg size="24" name="ht-item-editor-license-icons">
             <svg>
                 <defs>
@@ -91,7 +92,7 @@ class HTItemEditorLicense extends LitElement {
             ${repeat(
               licensetypes,
               item => html`
-                <option .data=${item}>${item.name}</option>
+                <option .data="${item}">${item.name}</option>
           `
             )}
            
@@ -100,25 +101,25 @@ class HTItemEditorLicense extends LitElement {
             ${repeat(
               selectedLicensetypes,
               licensetype => html`
-                <div class="license-container" .licensetypeId=${
+                <div class="license-container" .licensetypeId="${
                   licensetype.licensetypeId
-                }>
+                }">
                   <div class="name">${licensetype.name}</div>
                   <div class="right">
-                      <div class="price" ?hidden=${licensetype.free}>
+                      <div class="price" ?hidden="${licensetype.free}">
                           <paper-input label="Цена" allowed-pattern="[0-9]" always-float-label placeholder="0" .id="id${
                             licensetype.licensetypeId
-                          }" .value=${licensetype.price || 0}>
+                          }" .value="${licensetype.price || 0}">
                             <div slot="prefix">$ </div>
                           </paper-input>
                       </div>
-                      <paper-icon-button icon="ht-item-editor-license-icons:close" .openSource=${
+                      <paper-icon-button icon="ht-item-editor-license-icons:close" .openSource="${
                         licensetype.openSource
-                      } .licensetypeId=${
+                      }" .licensetypeId="${
                 licensetype.licensetypeId
-              } @click=${e => {
+              }" @click="${e => {
                 this._removeItem(e);
-              }}></paper-icon-button>
+              }}"></paper-icon-button>
                   </div>
                 </div>
           `
@@ -126,10 +127,6 @@ class HTItemEditorLicense extends LitElement {
           </div>
         </div>
 `;
-  }
-
-  static get is() {
-    return "ht-item-editor-license";
   }
 
   static get properties() {
@@ -266,4 +263,4 @@ class HTItemEditorLicense extends LitElement {
   }
 }
 
-customElements.define(HTItemEditorLicense.is, HTItemEditorLicense);
+customElements.define("ht-item-editor-license", HTItemEditorLicense);

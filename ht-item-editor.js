@@ -1,5 +1,5 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
@@ -26,11 +26,9 @@ import {
 } from "@01ht/ht-client-helper-functions";
 
 class HTItemEditor extends LitElement {
-  render() {
-    const { itemId, loading, loadingText } = this;
-    return html`
-      ${SharedStyles}
-      <style>
+  static styles = [
+    window.SharedStyles,
+    css`<style>
         h4 {
           font-family: Roboto,sans-serif;
           -moz-osx-font-smoothing: grayscale;
@@ -105,7 +103,12 @@ class HTItemEditor extends LitElement {
         #container[hidden], #status[hidden], #published[hidden], ht-spinner[hidden] {
           display:none;
         }
-      </style>
+      </style>`
+  ];
+
+  render() {
+    const { itemId, loading, loadingText } = this;
+    return html`
       <iron-iconset-svg size="24" name="ht-item-editor">
         <svg>
           <defs>
@@ -114,16 +117,16 @@ class HTItemEditor extends LitElement {
           </defs>
         </svg>
       </iron-iconset-svg>
-      <ht-spinner page text=${loadingText} ?hidden=${!loading}></ht-spinner>
-      <div id="container" ?hidden=${loading}>
+      <ht-spinner page .text="${loadingText}" ?hidden="${!loading}"></ht-spinner>
+      <div id="container" ?hidden="${loading}">
         <h1 class="mdc-typography--headline5">${
           itemId === "" ? "Добавить элемент" : "Настроки элемента"
         }</h1>
-        <ht-item-editor-status id="status" ?hidden=${itemId ===
-          ""}></ht-item-editor-status>
+        <ht-item-editor-status id="status" ?hidden="${itemId ===
+          ""}"></ht-item-editor-status>
         <div class="toggle-container">
-          <paper-toggle-button id="published" ?hidden=${itemId ===
-            ""}>Отображать в каталоге</paper-toggle-button>
+          <paper-toggle-button id="published" ?hidden="${itemId ===
+            ""}">Отображать в каталоге</paper-toggle-button>
         </div>
         <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="60"></paper-input>
         <div id="metaDescriptionContainer">
@@ -197,16 +200,12 @@ class HTItemEditor extends LitElement {
           <ht-item-editor-tags id="tags"></ht-item-editor-tags>
         </section>
         <section id="actions">
-          <paper-button @click=${e => {
+          <paper-button @click="${e => {
             itemId === "" ? this.add() : this.save();
-          }}>${itemId === "" ? "Добавить" : "Сохранить"}</paper-button>
+          }}">${itemId === "" ? "Добавить" : "Сохранить"}</paper-button>
         </section>
       </div>
 `;
-  }
-
-  static get is() {
-    return "ht-item-editor";
   }
 
   static get properties() {
@@ -427,4 +426,4 @@ class HTItemEditor extends LitElement {
   }
 }
 
-customElements.define(HTItemEditor.is, HTItemEditor);
+customElements.define("ht-item-editor", HTItemEditor);

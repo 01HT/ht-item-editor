@@ -1,14 +1,11 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
 class HTItemEditorCategoriesCategoryItem extends LitElement {
-  render() {
-    const { data, opened, selected } = this;
-    return html`
-      <style>
+  static styles = css`<style>
         :host {
             display: flex;
             box-sizing:border-box;
@@ -101,7 +98,11 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
         [hide] {
             visibility: hidden;
         }
-      </style>
+      </style>`;
+
+  render() {
+    const { data, opened, selected } = this;
+    return html`
       <iron-iconset-svg size="24" name="ht-item-editor-categories-item">
           <svg>
               <defs>
@@ -113,29 +114,25 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
       </iron-iconset-svg>
       <div id="container">
           <div id="actions">
-              <paper-icon-button icon="ht-item-editor-categories-item:add-box" @click=${e => {
-                this.open();
-              }} ?hidden=${opened} ?hide=${this.showBlockHidden()}></paper-icon-button>
-              <paper-icon-button icon="ht-item-editor-categories-item:indeterminate-check-box" @click=${e => {
-                this.close();
-              }} ?hidden=${!opened} ?hide=${this.showBlockHidden()}></paper-icon-button>
-          <div id="title" class=${
+              <paper-icon-button icon="ht-item-editor-categories-item:add-box" @click="${
+                this.open
+              }" ?hidden="${opened}" ?hide="${this.showBlockHidden()}"></paper-icon-button>
+              <paper-icon-button icon="ht-item-editor-categories-item:indeterminate-check-box" @click="${
+                this.close
+              }" ?hidden="${!opened}" ?hide="${this.showBlockHidden()}"></paper-icon-button>
+          <div id="title" class="${
             this.isRoot() ? "root" : ""
-          } ?selected=${selected} @click=${e => {
+          }" ?selected="${selected}" @click="${e => {
       this.toggle(e);
-    }}>${data.imageURL ? html`<img src=${data.imageURL}>` : ""}${
+    }}">${data.imageURL ? html`<img src="${data.imageURL}">` : ""}${
       data.name
     } <!--<iron-icon icon="ht-item-editor-categories-item:check-circle"></iron-icon>--></div>
         </div>
-          <div ?hidden=${!opened}>
+          <div ?hidden="${!opened}">
               <slot></slot>
           </div>
       </div>
       `;
-  }
-
-  static get is() {
-    return "ht-item-editor-categories-category-item";
   }
 
   static get properties() {
@@ -190,6 +187,6 @@ class HTItemEditorCategoriesCategoryItem extends LitElement {
 }
 
 customElements.define(
-  HTItemEditorCategoriesCategoryItem.is,
+  "ht-item-editor-categories-category-item",
   HTItemEditorCategoriesCategoryItem
 );

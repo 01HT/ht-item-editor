@@ -1,42 +1,43 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import { repeat } from "lit-html/directives/repeat.js";
 
 class HTItemEditorAuthor extends LitElement {
+  static styles = css`<style>
+    :host {
+        display: block;
+        box-sizing:border-box;
+        position: relative;
+    }
+
+    select {
+        margin: 16px 0;
+    }
+
+    select, option{
+        padding: 8px;
+        max-width: 300px;
+        font-size: 16px;
+    }
+    
+    #container {
+        margin-top:-16px;
+        display:flex;
+        flex-direction: column;
+    }
+  </style>`;
+
   render() {
     const { items } = this;
     return html`
-      <style>
-        :host {
-            display: block;
-            box-sizing:border-box;
-            position: relative;
-        }
-
-        select {
-            margin: 16px 0;
-        }
-
-        select, option{
-            padding: 8px;
-            max-width: 300px;
-            font-size: 16px;
-        }
-        
-        #container {
-            margin-top:-16px;
-            display:flex;
-            flex-direction: column;
-        }
-      </style>
         <div id="container">
-            <select @change=${_ => {
+            <select @change="${_ => {
               this._onSelect();
-            }}>
+            }}">
                 ${repeat(
                   items,
                   item => html`
-                    <option .value=${item.uid} .data=${item}>${
+                    <option .value="${item.uid}" .data="${item}">${
                     item.displayName
                   }</option>
             `
@@ -44,10 +45,6 @@ class HTItemEditorAuthor extends LitElement {
             </select>
         </div>
       `;
-  }
-
-  static get is() {
-    return "ht-item-editor-author";
   }
 
   static get properties() {
@@ -147,4 +144,4 @@ class HTItemEditorAuthor extends LitElement {
   }
 }
 
-customElements.define(HTItemEditorAuthor.is, HTItemEditorAuthor);
+customElements.define("ht-item-editor-author", HTItemEditorAuthor);

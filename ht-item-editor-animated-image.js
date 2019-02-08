@@ -1,5 +1,5 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-button";
 import "@polymer/paper-dialog/paper-dialog.js";
 import "@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js";
@@ -7,11 +7,9 @@ import "@01ht/ht-storage";
 import "@01ht/ht-animated-image";
 
 class HTItemEditorAnimatedImage extends LitElement {
-  render() {
-    const { data } = this;
-    return html`
-      ${SharedStyles}
-      <style>
+  static styles = [
+    window.SharedStyles,
+    css`<style>
         paper-dialog {
             width: 95%;
             max-width: 800px;
@@ -46,23 +44,25 @@ class HTItemEditorAnimatedImage extends LitElement {
         [hidden] {
             display: none;
         }
-      </style>
-     
+      </style>`
+  ];
+
+  render() {
+    const { data } = this;
+    return html`
       <div id="container"> 
         <p>.webp, .mp4, .gif | 16x9 | Ширина >= 960px | < 10MB</p>
         <div id="actions">
-            <paper-button id="choose" @click=${e => {
-              this._showDialog();
-            }}" raised>
+            <paper-button id="choose" @click="${this._showDialog}" raised>
                    Выбрать</paper-button>
-            <paper-button id="reset" @click=${e => {
-              this.reset();
-            }}" raised ?hidden=${!data.public_id}>
+            <paper-button id="reset" @click="${
+              this.reset
+            }" raised ?hidden="${!data.public_id}">
                    Убрать</paper-button>
         </div>
                 
-          <div id="img-container" ?hidden=${!data.public_id}>
-          <ht-animated-image .data=${data}></ht-animated-image>
+          <div id="img-container" ?hidden="${!data.public_id}">
+          <ht-animated-image .data="${data}"></ht-animated-image>
                 </div>
         <paper-dialog>
             <h2>Выберите файл</h2>
@@ -71,18 +71,14 @@ class HTItemEditorAnimatedImage extends LitElement {
             </paper-dialog-scrollable>
             <div class="buttons">
             <paper-button id="close" dialog-dismiss>Закрыть</paper-button>
-            <paper-button id="select" dialog-confirm @click="${e => {
-              this._insertImage();
-            }}">Выбрать</paper-button>
+            <paper-button id="select" dialog-confirm @click="${
+              this._insertImage
+            }">Выбрать</paper-button>
             </div>
         </paper-dialog>
 
       </div>
 `;
-  }
-
-  static get is() {
-    return "ht-item-editor-animated-image";
   }
 
   static get properties() {
@@ -137,4 +133,7 @@ class HTItemEditorAnimatedImage extends LitElement {
   }
 }
 
-customElements.define(HTItemEditorAnimatedImage.is, HTItemEditorAnimatedImage);
+customElements.define(
+  "ht-item-editor-animated-image",
+  HTItemEditorAnimatedImage
+);
