@@ -6,46 +6,50 @@ import "@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js";
 import "@01ht/ht-storage";
 import "@01ht/ht-animated-image";
 
+import { styles } from "@01ht/ht-theme/styles";
+
 class HTItemEditorAnimatedImage extends LitElement {
-  static styles = [
-    window.SharedStyles,
-    css`<style>
+  static get styles() {
+    return [
+      styles,
+      css`
         paper-dialog {
-            width: 95%;
-            max-width: 800px;
-            margin-left: 0;
-            margin-right: 0;
+          width: 95%;
+          max-width: 800px;
+          margin-left: 0;
+          margin-right: 0;
         }
 
         #actions {
-            display:flex;
-            flex-wrap:wrap;
+          display: flex;
+          flex-wrap: wrap;
         }
 
         #choose {
-            margin-right:8px;
+          margin-right: 8px;
         }
 
         #close {
-          background:none;
-          color:var(--accent-color);
+          background: none;
+          color: var(--accent-color);
         }
 
         #img-container {
           margin-top: 16px;
-          position:relative;
+          position: relative;
           max-width: 384px;
         }
 
         .buttons {
-          padding:8px 24px 16px 24px;
+          padding: 8px 24px 16px 24px;
         }
 
         [hidden] {
-            display: none;
+          display: none;
         }
-      </style>`
-  ];
+      `
+    ];
+  }
 
   render() {
     const { data } = this;

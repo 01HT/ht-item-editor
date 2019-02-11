@@ -3,29 +3,30 @@ import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-input/paper-input.js";
 import "@01ht/ht-elements-item-youtube-preview";
 
-class HTItemEditorYoutube extends LitElement {
-  static styles = css`<style>
-        :host {
-          display: block;
-          position:relative;
-          box-sizing:border-box;
-        }
+import { stylesBasicWebcomponents } from "@01ht/ht-theme/styles";
 
+class HTItemEditorYoutube extends LitElement {
+  static get styles() {
+    return [
+      stylesBasicWebcomponents,
+      css`
         ht-elements-item-youtube-preview {
-            width:100%;
-            max-width:384px;
-            margin-top:16px;
+          width: 100%;
+          max-width: 384px;
+          margin-top: 16px;
         }
 
         #container {
-            display:flex;
-            flex-direction:column;
+          display: flex;
+          flex-direction: column;
         }
 
         paper-input {
           max-width: 500px;
         }
-      </style>`;
+      `
+    ];
+  }
 
   render() {
     const { data } = this;

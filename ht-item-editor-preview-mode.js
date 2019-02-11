@@ -2,31 +2,32 @@
 import { LitElement, html, css } from "lit-element";
 import { repeat } from "lit-html/directives/repeat.js";
 
+import { stylesBasicWebcomponents } from "@01ht/ht-theme/styles";
+
 class HTItemEditorPreviewMode extends LitElement {
-  static styles = css`<style>
-    :host {
-        display: block;
-        box-sizing:border-box;
-        position: relative;
-    }
+  static get styles() {
+    return [
+      stylesBasicWebcomponents,
+      css`
+        select {
+          margin: 16px 0;
+        }
 
-    select {
-        margin: 16px 0;
+        select,
+        option {
+          padding: 8px;
+          max-width: 300px;
+          font-size: 16px;
+        }
 
-    }
-
-    select, option{
-        padding: 8px;
-        max-width: 300px;
-        font-size: 16px;
-    }
-    
-    #container {
-        margin-top:-16px;
-        display:flex;
-        flex-direction: column;
-    }
-  </style>`;
+        #container {
+          margin-top: -16px;
+          display: flex;
+          flex-direction: column;
+        }
+      `
+    ];
+  }
 
   render() {
     const { items, value } = this;

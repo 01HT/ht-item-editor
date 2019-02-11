@@ -4,32 +4,32 @@ import { repeat } from "lit-html/directives/repeat.js";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 import "@polymer/iron-iconset-svg/iron-iconset-svg";
 
-class HTItemEditorTags extends LitElement {
-  static styles = css`<style>
-        :host {
-            display: block;
-            box-sizing:border-box;
-            position: relative;
-        }
+import { stylesBasicWebcomponents } from "@01ht/ht-theme/styles";
 
-        select, option{
+class HTItemEditorTags extends LitElement {
+  static get styles() {
+    return [
+      stylesBasicWebcomponents,
+      css`
+        select,
+        option {
           padding: 8px;
           max-width: 300px;
           font-size: 16px;
         }
 
         paper-icon-button {
-            min-width: 40px;
-            min-height: 40px;
+          min-width: 40px;
+          min-height: 40px;
         }
 
         select {
-            margin-top: 16px;
+          margin-top: 16px;
         }
 
         #container {
-          margin-top:-16px;
-          display:flex;
+          margin-top: -16px;
+          display: flex;
           flex-direction: column;
         }
 
@@ -40,17 +40,16 @@ class HTItemEditorTags extends LitElement {
         }
 
         .selected {
-            max-width: 240px;
-            display: flex;
-            justify-content: space-between;
-            flex-direction: row;
-            margin: 4px 8px 4px 0;
-            padding: 2px 2px 2px 16px;
-            align-items: center;
-            border-radius: 2px;
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12),
-          0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          max-width: 240px;
+          display: flex;
+          justify-content: space-between;
+          flex-direction: row;
+          margin: 4px 8px 4px 0;
+          padding: 2px 2px 2px 16px;
+          align-items: center;
+          border-radius: 2px;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         }
 
         .name {
@@ -59,7 +58,9 @@ class HTItemEditorTags extends LitElement {
           text-overflow: ellipsis;
           overflow: hidden;
         }
-      </style>`;
+      `
+    ];
+  }
 
   render() {
     const { tags, selectedTags } = this;
@@ -163,7 +164,6 @@ class HTItemEditorTags extends LitElement {
     let tagId = selectedItem.data.tagId;
     let isExist = false;
     selectedTags.forEach(tag => {
-      console.log(tag);
       if (tag.tagId === tagId) isExist = true;
     });
     if (!isExist) selectedTags.push(selectedItem.data);

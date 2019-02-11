@@ -5,100 +5,102 @@ import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
 class HTItemEditorCategoriesCategoryItem extends LitElement {
-  static styles = css`<style>
-        :host {
-            display: flex;
-            box-sizing:border-box;
-            position:relative;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+        box-sizing: border-box;
+        position: relative;
+      }
 
-        #container {
-            display:flex;
-            flex-direction: column;
-            margin-left:16px;
-        }
+      #container {
+        display: flex;
+        flex-direction: column;
+        margin-left: 16px;
+      }
 
-        #actions {
-            display: flex;
-            align-items: center;
-            height:42px;
-        }
+      #actions {
+        display: flex;
+        align-items: center;
+        height: 42px;
+      }
 
-        #title {
-          max-width:200px;
-          display:inline;
-          line-height:24px;
-          font-size: 14px;
-          border: 1px solid #fff;
-          border-radius: 6px;
-          padding: 4px 8px;
-          cursor: pointer;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
+      #title {
+        max-width: 200px;
+        display: inline;
+        line-height: 24px;
+        font-size: 14px;
+        border: 1px solid #fff;
+        border-radius: 6px;
+        padding: 4px 8px;
+        cursor: pointer;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
 
-        #title:hover {
-            border: 1px solid #ddd;
-        }
+      #title:hover {
+        border: 1px solid #ddd;
+      }
 
-        #add-container {
-            margin-bottom:8px;
-        }
+      #add-container {
+        margin-bottom: 8px;
+      }
 
-        paper-icon-button {
-            color: var(--accent-color);
-        }
+      paper-icon-button {
+        color: var(--accent-color);
+      }
 
-        iron-icon {
-            display: none;
-            margin-left:4px;
-            color: #ddd;
-            min-width: 24px;
-            min-height: 24px;
-        }
+      iron-icon {
+        display: none;
+        margin-left: 4px;
+        color: #ddd;
+        min-width: 24px;
+        min-height: 24px;
+      }
 
-        #title:hover iron-icon {
-            display: block;
-        }
+      #title:hover iron-icon {
+        display: block;
+      }
 
-        #title[selected] {
-            background: rgba(139, 195, 74, 0.19);
-        }
+      #title[selected] {
+        background: rgba(139, 195, 74, 0.19);
+      }
 
-        [selected] iron-icon {
-            display: block;
-            color: var(--accent-color);
-        }
+      [selected] iron-icon {
+        display: block;
+        color: var(--accent-color);
+      }
 
-        #title.root {
-            cursor: default;
-        }
+      #title.root {
+        cursor: default;
+      }
 
-        #title.root:hover {
-            border:1px solid #fff;
-        }
+      #title.root:hover {
+        border: 1px solid #fff;
+      }
 
-        #title.root:hover iron-icon {
-            display:none;
-        }
+      #title.root:hover iron-icon {
+        display: none;
+      }
 
-        img {
-          margin-right:8px;
-          display:block;
-          width:24px;
-          height:24px;
-          float:left;
-        }
+      img {
+        margin-right: 8px;
+        display: block;
+        width: 24px;
+        height: 24px;
+        float: left;
+      }
 
-        [hidden] {
-            display:none;
-        }
+      [hidden] {
+        display: none;
+      }
 
-        [hide] {
-            visibility: hidden;
-        }
-      </style>`;
+      [hide] {
+        visibility: hidden;
+      }
+    `;
+  }
 
   render() {
     const { data, opened, selected } = this;

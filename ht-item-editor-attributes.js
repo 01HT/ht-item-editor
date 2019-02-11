@@ -3,24 +3,25 @@ import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-checkbox/paper-checkbox.js";
 import "./ht-item-editor-attributes-attribute-item.js";
 
+import { stylesBasicWebcomponents } from "@01ht/ht-theme/styles";
+
 class HTItemEditorAttributes extends LitElement {
-  static styles = css`<style>
-    :host {
-        display: block;
-        box-sizing:border-box;
-        position: relative;
-    }
+  static get styles() {
+    return [
+      stylesBasicWebcomponents,
+      css`
+        #container {
+          margin-top: -16px;
+          display: flex;
+          flex-direction: column;
+        }
 
-    #container {
-      margin-top: -16px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #tree {
-      margin-left: -32px;
-    }
-  </style>`;
+        #tree {
+          margin-left: -32px;
+        }
+      `
+    ];
+  }
 
   render() {
     return html`

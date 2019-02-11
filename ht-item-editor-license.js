@@ -5,73 +5,74 @@ import "@polymer/iron-iconset-svg/iron-iconset-svg";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-icon-button/paper-icon-button.js";
 
-class HTItemEditorLicense extends LitElement {
-  static styles = css`<style>
-        :host {
-          display: block;
-          position:relative;
-          box-sizing:border-box;
-        }
+import { stylesBasicWebcomponents } from "@01ht/ht-theme/styles";
 
-        select, option{
+class HTItemEditorLicense extends LitElement {
+  static get styles() {
+    return [
+      stylesBasicWebcomponents,
+      css`
+        select,
+        option {
           padding: 8px;
           max-width: 300px;
           font-size: 16px;
         }
-        
+
         #container {
-          display:flex;
+          display: flex;
           flex-direction: column;
         }
 
         .license-container {
-            width: 100%;
-            max-width: 360px;
-            font-size: 15px;
-            display: flex;
-            justify-content: space-between;
-            flex-direction: row;
-            margin: 8px 0;
-            padding: 8px 8px 8px 16px;
-            align-items: center;
-            border-radius: 2px;
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12),
-          0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          width: 100%;
+          max-width: 360px;
+          font-size: 15px;
+          display: flex;
+          justify-content: space-between;
+          flex-direction: row;
+          margin: 8px 0;
+          padding: 8px 8px 8px 16px;
+          align-items: center;
+          border-radius: 2px;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         }
-        
+
         .right {
-            display: flex;
-            align-items: center;
+          display: flex;
+          align-items: center;
         }
-        
+
         .price {
-            display: flex;
-            align-items: center;
-            margin: 0 8px;
+          display: flex;
+          align-items: center;
+          margin: 0 8px;
         }
-        
+
         span {
-            font-size: 14px;
-            margin-right: 4px;
+          font-size: 14px;
+          margin-right: 4px;
         }
-        
+
         paper-input {
-            width: 70px;
+          width: 70px;
         }
-        
+
         .name {
-            font-weight: 400;
+          font-weight: 400;
         }
 
         #selected {
-          margin-top:16px;
+          margin-top: 16px;
         }
 
         [hidden] {
-            display: none;
+          display: none;
         }
-      </style>`;
+      `
+    ];
+  }
 
   render() {
     const { licensetypes, selectedLicensetypes } = this;

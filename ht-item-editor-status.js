@@ -1,34 +1,35 @@
 "use strict";
 import { LitElement, html, css } from "lit-element";
 
+import { stylesBasicWebcomponents } from "@01ht/ht-theme/styles";
+
 class HTItemEditorStatus extends LitElement {
-  static styles = css`<style>
-    :host {
-      display: block;
-      position:relative;
-      box-sizing:border-box;
-    }
+  static get styles() {
+    return [
+      stylesBasicWebcomponents,
+      css`
+        #container {
+          display: flex;
+          flex-wrap: wrap;
+          font-size: 14px;
+          align-items: center;
+        }
 
-    #container {
-        display: flex;
-        flex-wrap: wrap;
-        font-size: 14px;
-        align-items:center;
-    }
+        #status {
+          font-weight: 500;
+          margin-right: 4px;
+        }
 
-    #status {
-        font-weight: 500;
-        margin-right: 4px;
-    }
-
-    #text {
-        padding: 2px 6px;
-        background: #83b735;
-        border-radius: 3px;
-        color:#fff;
-        font-size: 13px;
-    }
-  </style>`;
+        #text {
+          padding: 2px 6px;
+          background: #83b735;
+          border-radius: 3px;
+          color: #fff;
+          font-size: 13px;
+        }
+      `
+    ];
+  }
 
   render() {
     const { statusText } = this;

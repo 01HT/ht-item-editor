@@ -20,32 +20,36 @@ import "./ht-item-editor-attributes.js";
 import "./ht-item-editor-tags.js";
 import "./cloudinary-widget.js";
 
+import { styles } from "@01ht/ht-theme/styles";
+
 import {
   // callTestHTTPFunction,
   callFirebaseHTTPFunction
 } from "@01ht/ht-client-helper-functions";
 
 class HTItemEditor extends LitElement {
-  static styles = [
-    window.SharedStyles,
-    css`<style>
+  static get styles() {
+    return [
+      styles,
+      css`
         h4 {
-          font-family: Roboto,sans-serif;
+          font-family: Roboto, sans-serif;
           -moz-osx-font-smoothing: grayscale;
           -webkit-font-smoothing: antialiased;
           font-size: 1rem;
           line-height: 1.5rem;
           font-weight: 500;
-          letter-spacing: .0125em;
+          letter-spacing: 0.0125em;
           text-decoration: inherit;
           text-transform: inherit;
         }
-        
+
         section {
-          margin-top:32px;
+          margin-top: 32px;
         }
-        
-        ht-item-editor-status, paper-toggle-button {
+
+        ht-item-editor-status,
+        paper-toggle-button {
           margin: 16px 0;
         }
 
@@ -55,9 +59,9 @@ class HTItemEditor extends LitElement {
         }
 
         #metaDescriptionContainer {
-          display:flex;
-          align-items:center;
-          position:relative;
+          display: flex;
+          align-items: center;
+          position: relative;
           max-width: 500px;
           width: 100%;
         }
@@ -67,9 +71,9 @@ class HTItemEditor extends LitElement {
         }
 
         #nameInURLContainer {
-          display:flex;
-          align-items:center;
-          position:relative;
+          display: flex;
+          align-items: center;
+          position: relative;
           max-width: 500px;
           width: 100%;
         }
@@ -83,28 +87,32 @@ class HTItemEditor extends LitElement {
           position: absolute;
           top: 28px;
           height: 24px;
-          right:0;
-          bottom:0;
-          left:0;
-          display:flex;
-          justify-content:flex-end;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          display: flex;
+          justify-content: flex-end;
         }
 
         .toggle-container {
-          display:flex;
+          display: flex;
         }
 
         #actions {
           display: flex;
           justify-content: flex-end;
-          margin-top:32px;
+          margin-top: 32px;
         }
 
-        #container[hidden], #status[hidden], #published[hidden], ht-spinner[hidden] {
-          display:none;
+        #container[hidden],
+        #status[hidden],
+        #published[hidden],
+        ht-spinner[hidden] {
+          display: none;
         }
-      </style>`
-  ];
+      `
+    ];
+  }
 
   render() {
     const { itemId, loading, loadingText } = this;
