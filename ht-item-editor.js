@@ -312,6 +312,8 @@ class HTItemEditor extends LitElement {
       this.loading = true;
       this.loadingText = "Создание продукта";
       let item = {};
+      item.created = firebase.firestore.FieldValue.serverTimestamp();
+      item.updated = firebase.firestore.FieldValue.serverTimestamp();
       item.status = "moderation";
       item.statusText = "Рассматривается модератором";
       item.published = false;
