@@ -249,6 +249,7 @@ class HTItemEditor extends LitElement {
     try {
       this.shadowRoot.querySelector("#status").statusText = "Добавление";
       this.shadowRoot.querySelector("#published").checked = false;
+      this.shadowRoot.querySelector("#published").disabled = true;
       this.shadowRoot.querySelector("#name").value = "";
       this.shadowRoot.querySelector("#meta-description").value = "";
       this.shadowRoot.querySelector("#name-in-url").value = "";
@@ -278,6 +279,10 @@ class HTItemEditor extends LitElement {
       let itemData = await this._getItemData(itemId);
       this.shadowRoot.querySelector("#status").statusText = itemData.statusText;
       this.shadowRoot.querySelector("#published").checked = itemData.published;
+      this.shadowRoot.querySelector("#published").disabled = false;
+      if (itemData.status == "moderation") {
+        this.shadowRoot.querySelector("#published").disabled = true;
+      }
       this.shadowRoot.querySelector("#name").value = itemData.name;
       this.shadowRoot.querySelector("#meta-description").value =
         itemData.metaDescription;
@@ -312,8 +317,6 @@ class HTItemEditor extends LitElement {
       this.loading = true;
       this.loadingText = "Создание продукта";
       let item = {};
-      item.created = firebase.firestore.FieldValue.serverTimestamp();
-      item.updated = firebase.firestore.FieldValue.serverTimestamp();
       item.status = "moderation";
       item.statusText = "Рассматривается модератором";
       item.published = false;
@@ -426,6 +429,16 @@ class HTItemEditor extends LitElement {
       this.loading = false;
     } catch (err) {
       console.log("save: " + err.message);
+      this.dispatchEvent(
+        new CustomEvent("show-toast", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            text: `Save error: ${err.message}`
+          }
+        })
+      );
+      this.loading = false;
     }
   }
 
