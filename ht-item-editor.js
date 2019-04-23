@@ -157,9 +157,8 @@ class HTItemEditor extends LitElement {
             <div slot="suffix"></div>
           </paper-input>
         </div>
-        <paper-input id="github" label="Ссылка на репозиторий" placeholder="author/repository">
-            <div slot="prefix">https://github.com/</div>
-        </paper-input>
+        <paper-input id="repository" label="Ссылка на репозиторий" placeholder="https://github.com/author/repository"></paper-input>
+        <paper-input id="donation" label="Ссылка на страницу пожертвований" placeholder="https://money.yandex.ru/to/7000000000"></paper-input>
         <section>
           <h3 class="mdc-typography--headline6">Автор</h3>
           <ht-item-editor-author id="author"></ht-item-editor-author>
@@ -256,7 +255,8 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector(
         "#name-in-url [slot='suffix']"
       ).innerHTML = ``;
-      this.shadowRoot.querySelector("#github").value = "";
+      this.shadowRoot.querySelector("#repository").value = "";
+      this.shadowRoot.querySelector("#donation").value = "";
       this.shadowRoot.querySelector("#author").reset();
       this.shadowRoot.querySelector("#description").setDefaultData();
       this.shadowRoot.querySelector("#demo").value = "";
@@ -290,7 +290,9 @@ class HTItemEditor extends LitElement {
       this.shadowRoot.querySelector(
         "#name-in-url [slot='suffix']"
       ).innerHTML = `/${itemData.itemNumber}`;
-      this.shadowRoot.querySelector("#github").value = itemData.repositoryURL;
+      this.shadowRoot.querySelector("#repository").value =
+        itemData.repositoryURL;
+      this.shadowRoot.querySelector("#donation").value = itemData.donationURL;
       this.shadowRoot.querySelector("#author").data = itemData.authorData;
       this.shadowRoot
         .querySelector("#description")
@@ -326,7 +328,9 @@ class HTItemEditor extends LitElement {
         this.shadowRoot.querySelector("#meta-description").value || "";
       item.nameInURL =
         this.shadowRoot.querySelector("#name-in-url").value || "no-name";
-      item.repositoryURL = this.shadowRoot.querySelector("#github").value || "";
+      item.repositoryURL =
+        this.shadowRoot.querySelector("#repository").value || "";
+      item.donationURL = this.shadowRoot.querySelector("#donation").value || "";
       item.description = this.shadowRoot
         .querySelector("#description")
         .getData();
@@ -395,7 +399,9 @@ class HTItemEditor extends LitElement {
       updates.nameInURL =
         this.shadowRoot.querySelector("#name-in-url").value || "no-name";
       updates.repositoryURL =
-        this.shadowRoot.querySelector("#github").value || "";
+        this.shadowRoot.querySelector("#repository").value || "";
+      updates.donationURL =
+        this.shadowRoot.querySelector("#donation").value || "";
       updates.description = this.shadowRoot
         .querySelector("#description")
         .getData();
