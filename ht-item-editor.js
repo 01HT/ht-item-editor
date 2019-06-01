@@ -139,7 +139,7 @@ class HTItemEditor extends LitElement {
         <paper-input id="name" label="Название" allowed-pattern="^[0-9a-zA-Zа-яА-Я ]" char-counter maxlength="60"></paper-input>
         <div id="metaDescriptionContainer">
           <div class="warning">
-              <a href="https://support.google.com/webmasters/answer/35624?hl=ru&visit_id=636849945150474069-113811972&rd=1" target="_blank" rel="noopener">
+              <a href="https://support.google.com/webmasters/answer/35624?hl=ru&visit_id=636849945150474069-113811972&rd=1" target="_blank" rel="noopener nofollow">
                 <iron-icon icon="ht-item-editor:info"></iron-icon>
               </a>
           </div>
